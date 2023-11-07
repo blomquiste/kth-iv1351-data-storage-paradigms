@@ -1,0 +1,113 @@
+@startuml
+hide circle
+' skinparam linetype ortho
+' skinparam package {
+'     BackgroundColor LightYellow
+' }
+'top to bottom direction
+left to right direction
+
+' skinparam ClassAttributeIconSize 0
+' class classtest{}
+
+entity "person" as p {
+    * id : UNIQUE <<PK>>
+    --
+    name 
+    ': string 
+    street
+    zip
+    city
+    email
+    ' : text
+    phone_number
+}
+    note top 
+    Name of entity? contact_information instead of person?
+    name -> one can have more than one surenames, second name etc. Therefore not
+    divided into first and surname
+    id -> system generated 
+    end note
+
+entity "student" as s {
+    * student_id : UNIQUE    <<PK>>
+    --
+    * person_id : UNIQUE     <<FK>>
+    * person_number : UNIQUE <<FK>>
+    * instruments 0..*
+    * siblings 0..*
+    * rented_instrument 0..2
+    * next_of_kin : UNIQUE   <<FK>>
+    ' no next of kin, only ice?
+    ' next_of_kin == person_id
+}
+' note top
+'     student_id -> should student_id == person_id?
+'     What about person_number?
+' end note
+
+' ärver från person
+entity "ice" as ice {
+    student_id
+    person_id
+}
+
+entity "sibling" as sib{
+    student_id
+    student_id
+}
+
+' find a better name. "instrument_skill"? Is it even neccessary??
+entity "instrument" as i {
+    type
+    level
+}
+
+' is in_stock derived data? If rentee_id than its not in stock?
+entity "instrument_rental" as ir {
+    rent_id
+    in_stock : boolean
+    rentee_id
+    type
+}
+
+entity "lesson" as l{
+    date
+    start
+    end
+    price
+    instrument
+}
+
+' entity "billing_info" {
+' }
+
+' entity payment/salllllarish {
+' }
+
+entity "private_lesson" as pl {
+    level
+    instructor
+}
+
+entity "group_lesson" as e {
+    genre
+    max_nbr_of_students
+    min_nbr_of_students
+}
+
+entity "ensemble" as e {
+    genre
+    max_nbr_of_students
+    min_nbr_of_students
+}
+
+' inheritance
+pl <|-- l
+' p: id ||--|| s: person_id
+' relations
+p ||--|| s
+
+
+' et |o"1"---"10"o{ et2 : relationtest
+@enduml
