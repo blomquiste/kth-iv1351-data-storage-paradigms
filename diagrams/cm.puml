@@ -53,8 +53,8 @@ Together {
     ' ärver från person
     entity "ice" {
         --
+        ' person_id : <<FK>>???????
         student_id : <<FK>>
-        ' person_id : <<FK>>
         relation
     }
 
