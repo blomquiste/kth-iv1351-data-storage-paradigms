@@ -3,7 +3,7 @@ hide circle
 ' 'need to allow mixing to accomplish something with mixed shapes
 ' allow_mixing
 
-' skinparam linetype ortho
+skinparam linetype ortho
 ' skinparam package {
 '     BackgroundColor LightYellow
 ' }
@@ -12,18 +12,18 @@ hide circle
 
 ' skinparam ClassAttributeIconSize 0
 
-note as n1
-    Attributes have cardinality
-    0..1 if nothing else is specified.
-end note
 
-note as n2 
+note as n1 
     Attributes cardinality 1..1 
-    is indicated with 'NOT NULL'
+    is indicated with 'NOT NULL'.
+
+    Default cardinality is 0..1
+    Other cardinalities are specified.
 end note
 
 note as s1
-    something something about price
+    Payments are calculated based on lessons.
+    According to 'Detailed Descriptions'.
 end note
 
 ' ACTORS
@@ -121,7 +121,6 @@ entity "session" {
      --
 }
 
-
 ' ska instructor ligger på denna nivå eller nere hos childs?
 entity "lesson" {
     --
@@ -167,15 +166,6 @@ note bottom
     beginner, intermediate, advanced.
 end note
 
-
-entity "location" {
-    --
-    room
-    floor
-    building
-}
-
-
 entity "ensemble" {
     ' id  UNIQUE  NOT NULL
     --
@@ -192,12 +182,12 @@ entity "ensemble" {
 
 ' RELATIONS
 ' person ||--|{ address  livesAt
-student ||--|{ address : livesAt
-instructor ||--|{ address : livesAt
+student "livesAt" }|--|| address
+instructor "livesAt" }|--|| address
 
-contact_person ||--|| contact_details : has
-student ||--|| contact_details : has
-instructor ||--|| contact_details : has
+contact_person "has" ||--|| contact_details
+student ||--|| "of" contact_details
+instructor "has" ||--|| contact_details
 ' person ||--|| student::person_id : isA
 ' person ||--|| instructor::person_id : isA
 ' person ||--|| contact_person::person_id : isA
@@ -206,14 +196,14 @@ instructor ||--|| contact_details : has
 ' rental "of" ||--|| instrument 
 student "canRent" |o--o{ instrument
 
-student |o--o{ lesson : mayAttend
-student |o--o{ individual_lesson : mayAttend
-student }o--o{ group_lesson : mayAttend
-student }o--o{ ensemble : mayAttend
-lesson }|--|| instructor : taughtBy
+' student "mayAttend" |o--o{ lesson
+student "mayAttend" ||--o{ individual_lesson
+student "mayAttend" }--o{ group_lesson
+student "mayAttend" }--o{ ensemble
+' lesson "isTaughtBy" }|--|| instructor
 
 student "MayHaveA" }|--o| contact_person
-student }|--o{ sibling : mayHave
+student "MayHaveA\n\n\n" }|--o{ sibling
 
 ' sibling }|--|{ student : isA
 ' et |o"1"---"10"o{ et2 : relationtest
@@ -223,11 +213,12 @@ student }|--o{ sibling : mayHave
 ' session ||---|| group_lesson : mayBookA
 ' session ||---|| individual_lesson : mayBookA
 ' session ||---|| ensemble : mayBookA
-group_lesson "heldAt" ||--|| location
 
-instructor "assignedTo"||---|| group_lesson
-instructor "assignedTo"||---|| individual_lesson
-instructor "mayTeach"||---|| ensemble
+' group_lesson "heldAt" ||--|| location
+
+instructor "assignedTo"||---o{ group_lesson
+instructor "assignedTo"||---o{ individual_lesson
+instructor "mayTeach" ||---o{ ensemble
 
 ' INHERITANCE
 hide person
@@ -260,7 +251,7 @@ show contact_details
 
 instructor --[hidden]right-> student
 student --[hidden]up-> contact_person
-' instructor --[hidden]up-> address
+instructor --[hidden]up-> address
 ' student --[hidden]up-> address
 ' instructor --[hidden]up-> contact_details
 ' student --[hidden]up-> contact_details
@@ -395,6 +386,13 @@ entity "full_name" {
     first_name NOT NULL
     middle_name
     last_name NOT NULL
+}
+
+entity "location" {
+    --
+    room
+    floor
+    building
 }
 
 @enduml
