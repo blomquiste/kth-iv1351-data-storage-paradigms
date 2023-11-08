@@ -3,23 +3,22 @@ hide circle
 ' 'need to allow mixing to accomplish something with mixed shapes
 ' allow_mixing
 
-skinparam linetype ortho
+' skinparam linetype ortho
 ' skinparam package {
 '     BackgroundColor LightYellow
 ' }
-top to bottom direction
+' top to bottom direction
 ' left to right direction
 
 ' skinparam ClassAttributeIconSize 0
-' class classtest{}
 
 ' ACTORS
 entity "person" {
 ' entity "contact_info" {
-    ' * id : UNIQUE <<PK>>
+    ' id : UNIQUE
     --
     first_name : NOT NULL
-    middle_name  [0..1]
+    middle_name
     last_name : NOT NULL
 }
 
@@ -37,53 +36,51 @@ entity "contact_details" {
 }
 
 entity "student" {
-    * id : UNIQUE <<PK>>
+    id : UNIQUE
     --
-    ' * person_id : UNIQUE     <<FK>>
+    ' person_id : UNIQUE
     person_number : UNIQUE
     first_name : NOT NULL
-    middle_name  [0..1]
+    middle_name
     last_name : NOT NULL
-    siblings [0..*]
-    rented_instrument [0..2]
+    ' siblings [0..*]
+    ' rented_instrument [0..2]
     ' eller ska jag dela upp det i två?
-    contact_person : UNIQUE   <<FK>>
+    ' contact_person : UNIQUE
     ' no next of kin, only contact_person?
     ' next_of_kin == person_id
 }
-' note top
-'     student_id -> should student_id == person_id?
-'     What about person_number?
-' end note
 
 ' ärver från person
 entity "contact_person" {
     --
-    ' person_id : <<FK>>???????
-    student_id : UNIQUE <<FK>>
-    relation : [*..1]
+    ' person_id :
+    first_name : NOT NULL
+    middle_name
+    last_name : NOT NULL
+    student_id : UNIQUE
+    relation : 
 }
 
 entity "sibling" {
     --
-    student_id : NOT NULL <<FK>>
-    student_id : NOT NULL <<FK>>
+    student_id : [0..*] NOT NULL
 }
 entity "instructor" {
-    * id : UNIQUE <<PK>>
+    id : UNIQUE 
     --
-    ' * person_id : UNIQUE     <<FK>>
-    * person_number : UNIQUE
+    ' person_id : UNIQUE
+    person_number : UNIQUE
 }
 
 ' INSTRUMENTS
 entity "instrument" {
-* id : UNIQUE <<PK>>
+id : UNIQUE 
 ' rent_id
 --
-instrument/type : NOT NULL
-brand [0..*]
-price_per_time_unit : NOT NULL
+type : NOT NULL
+brand : NOT NULL
+price_per_month: NOT NULL
 
 ' or
 ' __
@@ -101,9 +98,9 @@ price_per_time_unit : NOT NULL
 ' }
 
 ' is in_stock derived data? If rentee_id than its not in stock?
-entity "rented_instrument" {
+entity "rental" {
     --
-    instrument_id : UNIQUE <<FK>>
+    instrument_id : UNIQUE
     ' rent_id
     student_id : NOT NULL
     ' rentee
@@ -111,87 +108,75 @@ entity "rented_instrument" {
 }
 
 ' LESSONS
+entity "session" {
+     id
+     --
+}
+
+
 ' ska instructor ligger på denna nivå eller nere hos childs?
 entity "lesson" {
     --
-    instructor_id <<FK>>
+    instructor_id
     date : NOT NULL
     start_time : NOT NULL
     end_time : NOT NULL
     price : NOT NULL
 }
+
 entity "private_lesson" {
-    * id : UNIQUE <<PK>>
+    id : UNIQUE
     --
-    instrument
-    level : {beginner, intermediate,advanced}
+    instrument : NOT NULL
+    level  : NOT NULL
+    date : NOT NULL
+    start_time : NOT NULL
+    end_time : NOT NULL
 }
+note bottom
+    The allowed values for level are
+    beginner, intermediate, advanced.
+end note
+
 
 ' TODO: Ska level alternativen skrivas som kommentar istället??
 entity "group_lesson" {
-    * id : UNIQUE <<PK>>
+    id : UNIQUE
     --
     instrument : NOT NULL
-    level : {beginner,intermediate,advanced}
-    class_room : NOT NULL
-    min_nbr_of_students : NOT NULL
-}
-
-entity "group_participants" {
-    --
-    group_lesson_id : <<FK>>
-    registered_students [0..*]
-    ' registered_students : student_id[]
-}
-
-entity "ensemble" {
-    * id : UNIQUE <<PK>>
-    --
-    instructor_id <<FK>>
+    level : NOT NULL
     date : NOT NULL
     start_time : NOT NULL
     end_time : NOT NULL
+    ' class_room : NOT NULL
+    min_nbr_of_students : NOT NULL
+}
+note bottom
+    The allowed values for level are
+    beginner, intermediate, advanced.
+end note
+
+
+entity "place" {
+    --
+    room
+    floor
+    building
+}
+
+entity "ensemble" {
+    id : UNIQUE 
+    --
+    ' instructor_id
+    ' date : NOT NULL
+    ' start_time : NOT NULL
+    ' end_time : NOT NULL
+    ' class_room
     price : NOT NULL
-    genre
-    class_room
+    genre : NOT NULL
     max_nbr_of_students
     min_nbr_of_students
 }
-
-entity "ensemble_participants" {
-    --
-    ensemble_lesson_id : UNIQUE <<FK>>
-    registered_students [0..*]
-}
-
-' FINANCIAL
-entity student_payment {
-* id : UNIQUE <<PK>>
---
-student_id
-start_of_period
-end_of_period
-lessons
-rented_instruments
-}
-' note bottom 
-'     What if the bill should include several students? 
-' end note
-entity "billing_information" {}
-
-entity instructor_payment {
-* id : UNIQUE <<PK>>
---
-instructor_id
-start_of_period
-end_of_period
-lessons
-}
-' entity "monthly_statement" {
-' }
-
-entity "payout_information" {}
-
 
 ' RELATIONS
 ' person ||--|{ address : livesAt
@@ -205,27 +190,37 @@ instructor ||--|| contact_details : has
 ' person ||--|| instructor::person_id : isA
 ' person ||--|| contact_person::person_id : isA
 ' student |o"1"--"0..2"o{ rented_instrument : mayRent
-student |o--o{ rented_instrument : mayRent
-rented_instrument ||--|| instrument 
-billing_information ||--|{ student : for
-payout_information ||--|| instructor : for
-
+student |o--o{ rental : mayMake
+rental ||---|| instrument : specifiesRentalOf
 
 student |o--o{ lesson : mayAttend
-student |o--o{ ensemble : mayAttend
+student |o--o{ private_lesson : mayAttend
+student }o--o{ group_lesson : mayAttend
+student }o--o{ ensemble : mayAttend
 lesson }|--|| instructor : taughtBy
 
-student ||--o| contact_person : contactPerson
-student }|--o{ sibling : mayHaveA
+student ||--o| contact_person : mayHaveA
+student }|--o{ sibling : mayHave
 
-group_lesson ||--|| group_participants : has
-ensemble ||--|| ensemble_participants : has
 ' sibling }|--|{ student : isA
 ' et |o"1"---"10"o{ et2 : relationtest
 
+' session ||---|| place : reserves 
+' session ||---|| lesson : books
+' session ||---|| group_lesson : mayBookA
+' session ||---|| private_lesson : mayBookA
+' session ||---|| ensemble : mayBookA
+group_lesson ||--|| place : heldAt
+
+instructor ||---|| group_lesson : mayHold
+instructor ||---|| private_lesson : mayHold
+' instructor ||---|| ensemble : mayHold
 
 ' INHERITANCE
 hide person
+hide lesson
+hide session
+show contact_details
 
 ' ' rename the x* variants into x1 to see effect
 ' () "xor\nsubtypes" as x1
@@ -237,22 +232,118 @@ hide person
 ' x_1 -up- private_lesson
 ' x_1 -up- group_lesson
 
-lesson <|--down- private_lesson
-lesson <|--down- group_lesson
-' lesson <|--down- ensemble
-person <|--down- student
-person <|--down- instructor
-person <|--down- contact_person
+' lesson <|--down- private_lesson
+' lesson <|--down- group_lesson
+' ' lesson <|--down- ensemble
+' person <|--down- student
+' person <|--down- instructor
+' person <|--down- contact_person
 
 ' ARRANGEMENT
-group_lesson -[hidden]right-> private_lesson
-group_lesson -[hidden]down-> group_participants
-ensemble -[hidden]down-> ensemble_participants
+' person --[hidden]up-> student
+' person --[hidden]up-> contact_person
+' person --[hidden]up-> instructor
+' person --[hidden]left-> address
 
-person -[hidden]up-> student
-person -[hidden]up-> contact_person
-person -[hidden]up-> instructor
-person -[hidden]left-> address
+instructor --[hidden]right-> student
+student --[hidden]up-> contact_person
+' instructor --[hidden]up-> address
+' student --[hidden]up-> address
+' instructor --[hidden]up-> contact_details
+' student --[hidden]up-> contact_details
 
+' instructor --[hidden]down-> contact_details
+' student --[hidden]down-> contact_details
+' contact_person --[hidden]down-> contact_details
+
+
+@enduml
+@startuml
+hide circle
+
+skinparam linetype ortho
+' top to bottom direction
+left to right direction
+' skinparam ClassAttributeIconSize 0
+
+' FINANCIAL
+entity student_payment {
+    id : UNIQUE
+    --
+    student_id
+    start_of_period
+    end_of_period
+    lessons
+    rented_instruments
+}
+' note bottom 
+'     What if the bill should include several students? 
+' end note
+entity "billing_information" {
+    ' The name on the credit card or billing account.
+    name
+    ' The address associated with the credit card or account.
+    billing_address
+    ' Credit card number, expiration date, and security code (CVV), or bank account details for direct debit.
+    Payment Method Details
+    ' Phone number and email address, in case the business needs to contact the person about their bill.
+    Contact Information
+    ' Information regarding how often the customer will be charged (monthly, quarterly, annually).
+    billing_cycle_information
+}
+
+entity instructor_payment {
+    id : UNIQUE
+    --
+    instructor_id
+    start_of_period
+    end_of_period
+    lessons
+}
+' entity "monthly_statement" {
+' }
+
+entity "payout_information" {
+    ' The name of the individual or business that will receive the payment.
+    payee
+    ' Payment Address: The postal address associated with the payee's account, if necessary.
+    payment_address
+    ' Bank Account Details: This could include the bank name, account number, and routing number for bank transfers.
+    account_no
+    routing_no
+    bank
+    ' SWIFT Code and International Bank Account Number (IBAN): For international payments, these numbers help identify the bank and the individual account.
+    ' Tax Identification Number (TIN): This might be required for tax purposes, depending on the nature and location of the transaction.
+}
+
+
+' billing_information ||--|{ student : for
+' payout_information ||--|| instructor : for
+
+' private_lesson ||---|| time_period : lasts
+' group_lesson ||---|| time_period : lasts
+' ensemble ||---|| time_period : lasts
+' group_lesson ||---|| group_participants : has
+' ensemble ||---|| ensemble_participants : has
+
+entity "time_period" {
+    --
+    date : NOT NULL
+    start_time : NOT NULL
+    end_time : NOT NULL
+}
+
+entity "group_participants" {
+    --
+    group_lesson_id :
+    registered_students [0..*]
+    ' registered_students : student_id[]
+}
+
+entity "ensemble_participants" {
+    --
+    ensemble_lesson_id : UNIQUE
+    registered_students [0..*]
+}
 
 @enduml
