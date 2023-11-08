@@ -13,199 +13,179 @@ top to bottom direction
 ' skinparam ClassAttributeIconSize 0
 ' class classtest{}
 
-Together {
-    ' ACTORS
-    entity "person" {
-        ' * id : UNIQUE <<PK>>
-        --
-        first_name
-        middle_name
-        last_name
-        email
-        phone_number
-    }
+' ACTORS
+entity "person" {
+' entity "contact_info" {
+    ' * id : UNIQUE <<PK>>
+    --
+    first_name : NOT NULL
+    middle_name  [0..1]
+    last_name : NOT NULL
+    email : NOT NULL
+    phone_number : NOT NULL
+}
 
-    entity "address" {
-        --
-        street
-        zip
-        city
-    }
+entity "address" {
+    --
+    street : NOT NULL
+    zip : NOT NULL
+    city : NOT NULL
+}
 
-    entity "student" {
-        * id : UNIQUE <<PK>>
-        --
-        ' * person_id : UNIQUE     <<FK>>
-        * person_number : UNIQUE
-        * instruments 0..*
-        * siblings 0..*
-        * rented_instrument 0..2
-        ' eller ska jag dela upp det i två?
-        * next_of_kin : UNIQUE   <<FK>>
-        ' no next of kin, only ice?
-        ' next_of_kin == person_id
-    }
-    ' note top
-    '     student_id -> should student_id == person_id?
-    '     What about person_number?
-    ' end note
+entity "student" {
+    * id : UNIQUE <<PK>>
+    --
+    ' * person_id : UNIQUE     <<FK>>
+    * person_number : UNIQUE
+    * instruments [0..*]
+    * siblings [0..*]
+    * rented_instrument [0..2]
+    ' eller ska jag dela upp det i två?
+    * next_of_kin : UNIQUE   <<FK>>
+    ' no next of kin, only ice?
+    ' next_of_kin == person_id
+}
+' note top
+'     student_id -> should student_id == person_id?
+'     What about person_number?
+' end note
 
-    ' ärver från person
-    entity "ice" {
-        --
-        ' person_id : <<FK>>???????
-        student_id : <<FK>>
-        relation
-    }
+' ärver från person
+entity "ice" {
+    --
+    ' person_id : <<FK>>???????
+    student_id : UNIQUE <<FK>>
+    relation : [*..1]
+}
 
-    entity "sibling" {
-        --
-        student_id <<FK>>
-        student_id <<FK>>
-    }
-    entity "instructor" {
-        * id : UNIQUE <<PK>>
-        --
-        ' * person_id : UNIQUE     <<FK>>
-        * person_number : UNIQUE
-    }
+entity "sibling" {
+    --
+    student_id : NOT NULL <<FK>>
+    student_id : NOT NULL <<FK>>
+}
+entity "instructor" {
+    * id : UNIQUE <<PK>>
+    --
+    ' * person_id : UNIQUE     <<FK>>
+    * person_number : UNIQUE
 }
 
 ' INSTRUMENTS
-Together {
-    entity "instrument" {
-        * id : UNIQUE <<PK>>
-        ' rent_id
-        --
-        instrument/type
-        brand
-        price_per_time_unit
+entity "instrument" {
+* id : UNIQUE <<PK>>
+' rent_id
+--
+instrument/type : NOT NULL
+brand [0..*]
+price_per_time_unit : NOT NULL
 
-        ' or
-        ' __
-        ' instrument/type
-        ' brand
-        ' price_per_time_unit
-        ' in_stock
-        ' rented
+' or
+' __
+' instrument/type
+' brand
+' price_per_time_unit
+' in_stock
+' rented
 
-    }
-    ' ' find a better name. "instrument_skill"? Is it even neccessary??
-    ' entity "instrument" {
-    '     type
-    '     level
-    ' }
+}
+' ' find a better name. "instrument_skill"? Is it even neccessary??
+' entity "instrument" {
+'     type
+'     level
+' }
 
-    ' is in_stock derived data? If rentee_id than its not in stock?
-    entity "rented_instrument" {
-        --
-        instrument_id : UNIQUE <<FK>>
-        ' rent_id
-        student_id
-        ' rentee
-        start_date
-    }
+' is in_stock derived data? If rentee_id than its not in stock?
+entity "rented_instrument" {
+--
+instrument_id : UNIQUE <<FK>>
+' rent_id
+student_id : NOT NULL
+' rentee
+start_date : NOT NULL
 }
 
 ' LESSONS
-Together {
-    ' ska instructor ligger på denna nivå eller nere hos childs?
-    entity "lesson" {
-        --
-        instructor_id <<FK>>
-        date
-        start_time
-        end_time
-        price
-    }
-    entity "private_lesson" {
-        * id : UNIQUE <<PK>>
-        --
-        instrument
-        level : {beginner, intermediate,advanced}
-    }
+' ska instructor ligger på denna nivå eller nere hos childs?
+entity "lesson" {
+    --
+    instructor_id <<FK>>
+    date : NOT NULL
+    start_time : NOT NULL
+    end_time : NOT NULL
+    price : NOT NULL
+}
+entity "private_lesson" {
+    * id : UNIQUE <<PK>>
+    --
+    instrument
+    level : {beginner, intermediate,advanced}
+}
 
-    entity "group_lesson" {
-        * id : UNIQUE <<PK>>
-        --
-        instrument
-        level : {beginner,intermediate,advanced}
-        class_room
-        max_nbr_of_students
-        min_nbr_of_students
-    }
+' TODO: Ska level alternativen skrivas som kommentar istället??
+entity "group_lesson" {
+    * id : UNIQUE <<PK>>
+    --
+    instrument : NOT NULL
+    level : {beginner,intermediate,advanced}
+    class_room : NOT NULL
+    max_nbr_of_students : NOT NULL
+    min_nbr_of_students : NOT NULL
+}
 
-    entity "group_participants" {
-        --
-        group_lesson_id : <<FK>>
-        registered_students 
-        ' registered_students : student_id[]
-    }
+entity "group_participants" {
+    --
+    group_lesson_id : <<FK>>
+    registered_students [0..*]
+    ' registered_students : student_id[]
+}
 
-    entity "ensemble" {
-        * id : UNIQUE <<PK>>
-        --
-        genre
-        class_room
-        max_nbr_of_students
-        min_nbr_of_students
-    }
+entity "ensemble" {
+    * id : UNIQUE <<PK>>
+    --
+    instructor_id <<FK>>
+    date : NOT NULL
+    start_time : NOT NULL
+    end_time : NOT NULL
+    price : NOT NULL
+    genre
+    class_room
+    max_nbr_of_students
+    min_nbr_of_students
+}
 
-    entity "ensemble_participants" {
-        --
-        ensemble_lesson_id : <<FK>>
-        registered_students
-    }
+entity "ensemble_participants" {
+    --
+    ensemble_lesson_id : UNIQUE <<FK>>
+    registered_students [0..*]
 }
 
 ' FINANCIAL
-' Together {
-    entity student_payment {
-        * id : UNIQUE <<PK>>
-        --
-        student_id
-        start_of_period
-        end_of_period
-        lessons
-        rented_instruments
-    }
-    ' note bottom 
-    '     What if the bill should include several students? 
-    ' end note
-    entity "billing_information" {}
+entity student_payment {
+* id : UNIQUE <<PK>>
+--
+student_id
+start_of_period
+end_of_period
+lessons
+rented_instruments
+}
+' note bottom 
+'     What if the bill should include several students? 
+' end note
+entity "billing_information" {}
 
-    entity instructor_payment {
-        * id : UNIQUE <<PK>>
-        --
-        instructor_id
-        start_of_period
-        end_of_period
-        lessons
-    }
-    ' entity "monthly_statement" {
-    ' }
-
-    entity "payout_information" {}
-
+entity instructor_payment {
+* id : UNIQUE <<PK>>
+--
+instructor_id
+start_of_period
+end_of_period
+lessons
+}
+' entity "monthly_statement" {
 ' }
 
-' INHERITANCE
-' ' rename the x* variants into x1 to see effect
-' () "xor\nsubtypes" as x1
-' stack "xor" as x_1
-' label "xor\nsubtypes" as x__1
-
-' ' super/subtype relations using x1 as intermediate connection
-' lesson <|-down- x_1
-' x_1 -up- private_lesson
-' x_1 -up- group_lesson
-
-lesson <|--down- private_lesson
-lesson <|--down- group_lesson
-lesson <|--down- ensemble
-person <|--down- student
-person <|--down- instructor
-person <|--down- ice
+entity "payout_information" {}
 
 
 ' RELATIONS
@@ -220,7 +200,8 @@ billing_information ||--|{ student : for
 payout_information ||--|| instructor : for
 
 
-student |o--o{ lesson : canAttend
+student |o--o{ lesson : mayAttend
+student |o--o{ ensemble : mayAttend
 lesson }|--|| instructor : taughtBy
 
 student ||--|{ ice : contactPerson
@@ -231,20 +212,32 @@ ensemble ||--|| ensemble_participants : has
 ' sibling }|--|{ student : isA
 ' et |o"1"---"10"o{ et2 : relationtest
 
-' ARRANGEMENT
+' INHERITANCE
+' ' rename the x* variants into x1 to see effect
+' () "xor\nsubtypes" as x1
+' stack "xor" as x_1
+' label "xor\nsubtypes" as x__1
 
+' ' super/subtype relations using x1 as intermediate connection
+' lesson <|-down- x_1
+' x_1 -up- private_lesson
+' x_1 -up- group_lesson
+
+lesson <|--down- private_lesson
+lesson <|--down- group_lesson
+' lesson <|--down- ensemble
+person <|--down- student
+person <|--down- instructor
+person <|--down- ice
+
+' ARRANGEMENT
+group_lesson -[hidden]right-> private_lesson
+group_lesson -[hidden]down-> group_participants
+ensemble -[hidden]down-> ensemble_participants
+
+person -[hidden]up-> student
+person -[hidden]up-> ice
+person -[hidden]up-> instructor
+person -[hidden]left-> address
 
 @enduml
-
-' COMMENTS
-' With inheritance duplicate contact information is stored for persons that are both instructors and students
-' perhaps, person can be switched to contact_detail/contact_info?
-' or one can use person_id
-
-' **id** -> system generated. "person number" (a.k.a. personnummer, social
-' security nbr) should not be a requirement for ICE
-
-' **name-issue** -> You can always construct a full name from its
-' components, but you can't always deconstruct a full name into its components.
-' https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/
-' https://stackoverflow.com/questions/1122328/first-name-middle-name-last-name-why-not-full-name 
