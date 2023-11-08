@@ -21,8 +21,6 @@ entity "person" {
     first_name : NOT NULL
     middle_name  [0..1]
     last_name : NOT NULL
-    email : NOT NULL
-    phone_number : NOT NULL
 }
 
 entity "address" {
@@ -32,17 +30,25 @@ entity "address" {
     city : NOT NULL
 }
 
+entity "contact_details" {
+    --
+    email : NOT NULL
+    phone_number : NOT NULL
+}
+
 entity "student" {
     * id : UNIQUE <<PK>>
     --
     ' * person_id : UNIQUE     <<FK>>
-    * person_number : UNIQUE
-    * instruments [0..*]
-    * siblings [0..*]
-    * rented_instrument [0..2]
+    person_number : UNIQUE
+    first_name : NOT NULL
+    middle_name  [0..1]
+    last_name : NOT NULL
+    siblings [0..*]
+    rented_instrument [0..2]
     ' eller ska jag dela upp det i två?
-    * next_of_kin : UNIQUE   <<FK>>
-    ' no next of kin, only ice?
+    contact_person : UNIQUE   <<FK>>
+    ' no next of kin, only contact_person?
     ' next_of_kin == person_id
 }
 ' note top
@@ -51,7 +57,7 @@ entity "student" {
 ' end note
 
 ' ärver från person
-entity "ice" {
+entity "contact_person" {
     --
     ' person_id : <<FK>>???????
     student_id : UNIQUE <<FK>>
@@ -96,12 +102,12 @@ price_per_time_unit : NOT NULL
 
 ' is in_stock derived data? If rentee_id than its not in stock?
 entity "rented_instrument" {
---
-instrument_id : UNIQUE <<FK>>
-' rent_id
-student_id : NOT NULL
-' rentee
-start_date : NOT NULL
+    --
+    instrument_id : UNIQUE <<FK>>
+    ' rent_id
+    student_id : NOT NULL
+    ' rentee
+    start_date : NOT NULL
 }
 
 ' LESSONS
@@ -128,7 +134,6 @@ entity "group_lesson" {
     instrument : NOT NULL
     level : {beginner,intermediate,advanced}
     class_room : NOT NULL
-    max_nbr_of_students : NOT NULL
     min_nbr_of_students : NOT NULL
 }
 
@@ -189,10 +194,16 @@ entity "payout_information" {}
 
 
 ' RELATIONS
-person ||--|{ address : livesAt
+' person ||--|{ address : livesAt
+student ||--|{ address : livesAt
+instructor ||--|{ address : livesAt
+
+contact_person ||--|| contact_details : has
+student ||--|| contact_details : has
+instructor ||--|| contact_details : has
 ' person ||--|| student::person_id : isA
 ' person ||--|| instructor::person_id : isA
-' person ||--|| ice::person_id : isA
+' person ||--|| contact_person::person_id : isA
 ' student |o"1"--"0..2"o{ rented_instrument : mayRent
 student |o--o{ rented_instrument : mayRent
 rented_instrument ||--|| instrument 
@@ -204,7 +215,7 @@ student |o--o{ lesson : mayAttend
 student |o--o{ ensemble : mayAttend
 lesson }|--|| instructor : taughtBy
 
-student ||--|{ ice : contactPerson
+student ||--o| contact_person : contactPerson
 student }|--o{ sibling : mayHaveA
 
 group_lesson ||--|| group_participants : has
@@ -212,7 +223,10 @@ ensemble ||--|| ensemble_participants : has
 ' sibling }|--|{ student : isA
 ' et |o"1"---"10"o{ et2 : relationtest
 
+
 ' INHERITANCE
+hide person
+
 ' ' rename the x* variants into x1 to see effect
 ' () "xor\nsubtypes" as x1
 ' stack "xor" as x_1
@@ -228,7 +242,7 @@ lesson <|--down- group_lesson
 ' lesson <|--down- ensemble
 person <|--down- student
 person <|--down- instructor
-person <|--down- ice
+person <|--down- contact_person
 
 ' ARRANGEMENT
 group_lesson -[hidden]right-> private_lesson
@@ -236,8 +250,9 @@ group_lesson -[hidden]down-> group_participants
 ensemble -[hidden]down-> ensemble_participants
 
 person -[hidden]up-> student
-person -[hidden]up-> ice
+person -[hidden]up-> contact_person
 person -[hidden]up-> instructor
 person -[hidden]left-> address
+
 
 @enduml
