@@ -12,41 +12,58 @@ hide circle
 
 ' skinparam ClassAttributeIconSize 0
 
+note as n1
+    Attributes have cardinality
+    0..1 if nothing else is specified.
+end note
+
+note as n2 
+    Attributes cardinality 1..1 
+    is indicated with 'NOT NULL'
+end note
+
+note as s1
+    something something about price
+end note
+
 ' ACTORS
 entity "person" {
 ' entity "contact_info" {
-    ' id : UNIQUE
+    ' id UNIQUE NOT NULL
     --
-    first_name : NOT NULL
-    middle_name
-    last_name : NOT NULL
+    personal_identity_number UNIQUE NOT NULL
+    full_name NOT NULL
+    ' contact details ->>>
 }
 
 entity "address" {
     --
-    street : NOT NULL
-    zip : NOT NULL
-    city : NOT NULL
+    street NOT NULL
+    zip NOT NULL
+    city NOT NULL
 }
 
 entity "contact_details" {
     --
-    email : NOT NULL
-    phone_number : NOT NULL
+    email
+    phone_number NOT NULL
 }
 
+note bottom
+    Example of possible contact details
+    TBD
+end note
+
 entity "student" {
-    id : UNIQUE
+    ' id  UNIQUE NOT NULL
     --
-    ' person_id : UNIQUE
-    person_number : UNIQUE
-    first_name : NOT NULL
-    middle_name
-    last_name : NOT NULL
-    ' siblings [0..*]
-    ' rented_instrument [0..2]
+    ' person_id  UNIQUE NOT NULL
+    personal_identity_number  UNIQUE NOT NULL
+    full_name NOT NULL
+    ' siblings 0..*
+    ' rented_instrument 0..2
     ' eller ska jag dela upp det i två?
-    ' contact_person : UNIQUE
+    ' contact_person  UNIQUE NOT NULL
     ' no next of kin, only contact_person?
     ' next_of_kin == person_id
 }
@@ -54,43 +71,42 @@ entity "student" {
 ' ärver från person
 entity "contact_person" {
     --
-    ' person_id :
-    first_name : NOT NULL
-    middle_name
-    last_name : NOT NULL
-    student_id : UNIQUE
-    relation : 
+    ' person_id 
+    full_name NOT NULL
+    ' student_id 1..* UNIQUE NOT NULL
+    relation 
 }
 
 entity "sibling" {
     --
-    student_id : [0..*] NOT NULL
+    student_id  1..* NOT NULL
 }
 entity "instructor" {
-    id : UNIQUE 
+    ' id  UNIQUE  NOT NULL
     --
-    ' person_id : UNIQUE
-    person_number : UNIQUE
+    ' person_id  UNIQUE NOT NULL
+    personal_identity_number  UNIQUE NOT NULL
+    full_name  NOT NULL
+    instruments 1..* NOT NULL
+    available_time_slot 0..* 
 }
 
 ' INSTRUMENTS
 entity "instrument" {
-id : UNIQUE 
+' id  UNIQUE  NOT NULL
 ' rent_id
 --
-type : NOT NULL
-brand : NOT NULL
-price_per_month: NOT NULL
-
-' or
-' __
-' instrument/type
-' brand
-' price_per_time_unit
-' in_stock
-' rented
-
+type  NOT NULL
+brand  NOT NULL
+price_per_month NOT NULL
+quantity_in_stock NOT NULL
+' quantity_rented NOT NULL
 }
+note top
+    A student can rent 
+    max two instruments at a time.
+    Max lease is 12 months.
+end note
 ' ' find a better name. "instrument_skill"? Is it even neccessary??
 ' entity "instrument" {
 '     type
@@ -98,14 +114,6 @@ price_per_month: NOT NULL
 ' }
 
 ' is in_stock derived data? If rentee_id than its not in stock?
-entity "rental" {
-    --
-    instrument_id : UNIQUE
-    ' rent_id
-    student_id : NOT NULL
-    ' rentee
-    start_date : NOT NULL
-}
 
 ' LESSONS
 entity "session" {
@@ -118,20 +126,21 @@ entity "session" {
 entity "lesson" {
     --
     instructor_id
-    date : NOT NULL
-    start_time : NOT NULL
-    end_time : NOT NULL
-    price : NOT NULL
+    date  NOT NULL
+    start_time  NOT NULL
+    end_time  NOT NULL
+    price  NOT NULL
 }
 
-entity "private_lesson" {
-    id : UNIQUE
+entity "individual_lesson" {
+    ' id  UNIQUE NOT NULL
     --
-    instrument : NOT NULL
-    level  : NOT NULL
-    date : NOT NULL
-    start_time : NOT NULL
-    end_time : NOT NULL
+    instrument  NOT NULL
+    level   NOT NULL
+    date  NOT NULL
+    start_time  NOT NULL
+    end_time  NOT NULL
+    price NOT NULL
 }
 note bottom
     The allowed values for level are
@@ -139,17 +148,19 @@ note bottom
 end note
 
 
-' TODO: Ska level alternativen skrivas som kommentar istället??
+' TODO Ska level alternativen skrivas som kommentar istället??
 entity "group_lesson" {
-    id : UNIQUE
+    ' id  UNIQUE NOT NULL
     --
-    instrument : NOT NULL
-    level : NOT NULL
-    date : NOT NULL
-    start_time : NOT NULL
-    end_time : NOT NULL
-    ' class_room : NOT NULL
-    min_nbr_of_students : NOT NULL
+    instrument  NOT NULL
+    level  NOT NULL
+    date  NOT NULL
+    start_time  NOT NULL
+    end_time  NOT NULL
+    price NOT NULL
+    ' class_room  NOT NULL
+    min_nbr_of_students  NOT NULL
+    max_nbr_of_students  NOT NULL
 }
 note bottom
     The allowed values for level are
@@ -157,29 +168,30 @@ note bottom
 end note
 
 
-entity "place" {
+entity "location" {
     --
     room
     floor
     building
 }
 
+
 entity "ensemble" {
-    id : UNIQUE 
+    ' id  UNIQUE  NOT NULL
     --
     ' instructor_id
-    ' date : NOT NULL
-    ' start_time : NOT NULL
-    ' end_time : NOT NULL
+    ' date  NOT NULL
+    ' start_time  NOT NULL
+    ' end_time  NOT NULL
     ' class_room
-    price : NOT NULL
-    genre : NOT NULL
-    max_nbr_of_students
-    min_nbr_of_students
+    price  NOT NULL
+    genre  NOT NULL
+    min_nbr_of_students  NOT NULL
+    max_nbr_of_students  NOT NULL
 }
 
 ' RELATIONS
-' person ||--|{ address : livesAt
+' person ||--|{ address  livesAt
 student ||--|{ address : livesAt
 instructor ||--|{ address : livesAt
 
@@ -190,31 +202,32 @@ instructor ||--|| contact_details : has
 ' person ||--|| instructor::person_id : isA
 ' person ||--|| contact_person::person_id : isA
 ' student |o"1"--"0..2"o{ rented_instrument : mayRent
-student |o--o{ rental : mayMake
-rental ||---|| instrument : specifiesRentalOf
+' student |o--o{ rental : mayMake
+' rental "of" ||--|| instrument 
+student "canRent" |o--o{ instrument
 
 student |o--o{ lesson : mayAttend
-student |o--o{ private_lesson : mayAttend
+student |o--o{ individual_lesson : mayAttend
 student }o--o{ group_lesson : mayAttend
 student }o--o{ ensemble : mayAttend
 lesson }|--|| instructor : taughtBy
 
-student ||--o| contact_person : mayHaveA
+student "MayHaveA" }|--o| contact_person
 student }|--o{ sibling : mayHave
 
 ' sibling }|--|{ student : isA
 ' et |o"1"---"10"o{ et2 : relationtest
 
-' session ||---|| place : reserves 
+' session ||---|| location : reserves 
 ' session ||---|| lesson : books
 ' session ||---|| group_lesson : mayBookA
-' session ||---|| private_lesson : mayBookA
+' session ||---|| individual_lesson : mayBookA
 ' session ||---|| ensemble : mayBookA
-group_lesson ||--|| place : heldAt
+group_lesson "heldAt" ||--|| location
 
-instructor ||---|| group_lesson : mayHold
-instructor ||---|| private_lesson : mayHold
-' instructor ||---|| ensemble : mayHold
+instructor "assignedTo"||---|| group_lesson
+instructor "assignedTo"||---|| individual_lesson
+instructor "mayTeach"||---|| ensemble
 
 ' INHERITANCE
 hide person
@@ -229,10 +242,10 @@ show contact_details
 
 ' ' super/subtype relations using x1 as intermediate connection
 ' lesson <|-down- x_1
-' x_1 -up- private_lesson
+' x_1 -up- individual_lesson
 ' x_1 -up- group_lesson
 
-' lesson <|--down- private_lesson
+' lesson <|--down- individual_lesson
 ' lesson <|--down- group_lesson
 ' ' lesson <|--down- ensemble
 ' person <|--down- student
@@ -268,8 +281,9 @@ left to right direction
 
 ' FINANCIAL
 entity student_payment {
-    id : UNIQUE
+    id UNIQUE NOT NULL
     --
+    total_amount
     student_id
     start_of_period
     end_of_period
@@ -280,8 +294,9 @@ entity student_payment {
 '     What if the bill should include several students? 
 ' end note
 entity "billing_information" {
+    --
     ' The name on the credit card or billing account.
-    name
+    full_name NOT NULL
     ' The address associated with the credit card or account.
     billing_address
     ' Credit card number, expiration date, and security code (CVV), or bank account details for direct debit.
@@ -293,9 +308,10 @@ entity "billing_information" {
 }
 
 entity instructor_payment {
-    id : UNIQUE
+    id UNIQUE NOT NULL
     --
     instructor_id
+    total_amount
     start_of_period
     end_of_period
     lessons
@@ -304,6 +320,7 @@ entity instructor_payment {
 ' }
 
 entity "payout_information" {
+    --
     ' The name of the individual or business that will receive the payment.
     payee
     ' Payment Address: The postal address associated with the payee's account, if necessary.
@@ -320,30 +337,64 @@ entity "payout_information" {
 ' billing_information ||--|{ student : for
 ' payout_information ||--|| instructor : for
 
-' private_lesson ||---|| time_period : lasts
+' individual_lesson ||---|| time_period : lasts
 ' group_lesson ||---|| time_period : lasts
 ' ensemble ||---|| time_period : lasts
 ' group_lesson ||---|| group_participants : has
 ' ensemble ||---|| ensemble_participants : has
 
-entity "time_period" {
+entity "time_slot" {
     --
-    date : NOT NULL
-    start_time : NOT NULL
-    end_time : NOT NULL
+    date NOT NULL
+    start_time NOT NULL
+    end_time NOT NULL
 }
 
 entity "group_participants" {
     --
-    group_lesson_id :
-    registered_students [0..*]
+    group_lesson_id
+    min_enrolled
+    registered_students 0..*
     ' registered_students : student_id[]
 }
 
 entity "ensemble_participants" {
     --
-    ensemble_lesson_id : UNIQUE
-    registered_students [0..*]
+    ensemble_lesson_id UNIQUE NOT NULL
+    min_enrolled
+    max_enrolled
+    registered_students 0..*
+}
+
+entity "level" {
+    --
+    id
+    type
+}
+
+entity "price" {
+    --
+    currency
+    amount
+    lesson
+    level
+}
+
+entity "disount" {
+    --
+    type
+}
+
+entity "administrative_staff" {
+    --
+    employee_id
+}
+
+entity "full_name" {
+    --
+    first_name NOT NULL
+    middle_name
+    last_name NOT NULL
 }
 
 @enduml
