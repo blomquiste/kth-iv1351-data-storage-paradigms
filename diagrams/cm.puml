@@ -87,7 +87,7 @@ entity "instructor" {
     ' person_id  UNIQUE NOT NULL
     personal_identity_number  UNIQUE NOT NULL
     full_name  NOT NULL
-    instruments 1..* NOT NULL
+    instruments 1..* 
     available_time_slot 0..* 
 }
 
@@ -164,6 +164,9 @@ entity "group_lesson" {
 note bottom
     The allowed values for level are
     beginner, intermediate, advanced.
+
+    What does client mean by place?
+    For now it falls under min_nbr_of_students.
 end note
 
 entity "ensemble" {
