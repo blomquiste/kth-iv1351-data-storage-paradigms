@@ -276,7 +276,7 @@ left to right direction
 
 ' FINANCIAL
 entity student_payment {
-    id UNIQUE NOT NULL
+    ' id UNIQUE NOT NULL
     --
     total_amount
     student_id
@@ -303,7 +303,7 @@ entity "billing_information" {
 }
 
 entity instructor_payment {
-    id UNIQUE NOT NULL
+    ' id UNIQUE NOT NULL
     --
     instructor_id
     total_amount
@@ -399,12 +399,275 @@ entity "location" {
     building
 }
 
-entity "time_slot" {
+
+@enduml
+@startuml Soundgood Music School
+hide circle
+' 'need to allow mixing to accomplish something with mixed shapes
+' allow_mixing
+
+skinparam linetype ortho
+' skinparam package {
+'     BackgroundColor LightYellow
+' }
+' top to bottom direction
+' left to right direction
+
+' skinparam ClassAttributeIconSize 0
+
+
+note as n1 
+    Attributes cardinality 1..1 
+    is indicated with 'NOT NULL'.
+
+    Default cardinality is 0..1
+    Other cardinalities are specified.
+end note
+
+note as s1
+    Payments are calculated based on lessons.
+    According to 'Detailed Descriptions'.
+end note
+
+' ACTORS
+entity "person" {
+' entity "contact_info" {
+    ' id UNIQUE NOT NULL
+    --
+    personal_identity_number UNIQUE NOT NULL
+    full_name NOT NULL
+    ' contact details ->>>
+}
+
+entity "address" {
+    --
+    street NOT NULL
+    zip NOT NULL
+    city NOT NULL
+}
+
+entity "contact_details" {
+    --
+    email
+    phone_number NOT NULL
+}
+
+note bottom
+    Example of possible contact details
+    TBD
+end note
+
+entity "student" {
     ' id  UNIQUE NOT NULL
     --
+    ' person_id  UNIQUE NOT NULL
+    personal_identity_number  UNIQUE NOT NULL
+    full_name NOT NULL
+    ' siblings 0..*
+    ' rented_instrument 0..2
+    ' eller ska jag dela upp det i två?
+    ' contact_person  UNIQUE NOT NULL
+    ' no next of kin, only contact_person?
+    ' next_of_kin == person_id
+}
+
+' ärver från person
+entity "contact_person" {
+    --
+    ' person_id 
+    full_name NOT NULL
+    ' student_id 1..* UNIQUE NOT NULL
+    relation 
+}
+
+entity "sibling" {
+    --
+    student_id  1..* NOT NULL
+}
+entity "instructor" {
+    ' id  UNIQUE  NOT NULL
+    --
+    ' person_id  UNIQUE NOT NULL
+    personal_identity_number  UNIQUE NOT NULL
+    full_name  NOT NULL
+    instruments 1..* 
+    available_time_slot 0..* 
+}
+
+' INSTRUMENTS
+entity "instrument" {
+' id  UNIQUE  NOT NULL
+' rent_id
+--
+type  NOT NULL
+brand  NOT NULL
+price_per_month NOT NULL
+quantity_in_stock NOT NULL
+' quantity_rented NOT NULL
+}
+note top
+    A student can rent 
+    max two instruments at a time.
+    Max lease is 12 months.
+end note
+' ' find a better name. "instrument_skill"? Is it even neccessary??
+' entity "instrument" {
+'     type
+'     level
+' }
+
+' is in_stock derived data? If rentee_id than its not in stock?
+
+' LESSONS
+entity "session" {
+     id
+     --
+}
+
+' ska instructor ligger på denna nivå eller nere hos childs?
+entity "lesson" {
+    --
+    instructor_id
     date  NOT NULL
     start_time  NOT NULL
     end_time  NOT NULL
+    price  NOT NULL
 }
+
+entity "individual_lesson" {
+    ' id  UNIQUE NOT NULL
+    --
+    instrument  NOT NULL
+    level   NOT NULL
+    date  NOT NULL
+    start_time  NOT NULL
+    end_time  NOT NULL
+    price NOT NULL
+}
+note bottom
+    The allowed values for level are
+    beginner, intermediate, advanced.
+end note
+
+
+' TODO Ska level alternativen skrivas som kommentar istället??
+entity "group_lesson" {
+    ' id  UNIQUE NOT NULL
+    --
+    instrument  NOT NULL
+    level  NOT NULL
+    date  NOT NULL
+    start_time  NOT NULL
+    end_time  NOT NULL
+    price NOT NULL
+    ' class_room  NOT NULL
+    min_nbr_of_students  NOT NULL
+    max_nbr_of_students  NOT NULL
+}
+note bottom
+    The allowed values for level are
+    beginner, intermediate, advanced.
+
+    What does client mean by place?
+    For now it falls under min_nbr_of_students.
+end note
+
+entity "ensemble" {
+    ' id  UNIQUE  NOT NULL
+    --
+    ' instructor_id
+    ' date  NOT NULL
+    ' start_time  NOT NULL
+    ' end_time  NOT NULL
+    ' class_room
+    price  NOT NULL
+    genre  NOT NULL
+    min_nbr_of_students  NOT NULL
+    max_nbr_of_students  NOT NULL
+}
+
+' RELATIONS
+person }|--|| "livesAt" address
+' student }|--|| "livesAt" address
+' instructor }|--|| "livesAt" address
+
+contact_person "has" ||--|| contact_details
+person "has" ||--|| contact_details
+' student "has" ||--|| contact_details
+' instructor "has" ||--|| contact_details
+
+' person ||--|| student::person_id : isA
+' person ||--|| instructor::person_id : isA
+' person ||--|| contact_person::person_id : isA
+' student |o"1"--"0..2"o{ rented_instrument : mayRent
+' student |o--o{ rental : mayMake
+' rental "of" ||--|| instrument 
+student "canRent" |o..o{ instrument
+
+' student "mayAttend" |o--o{ lesson
+student "mayAttend" ||..o{ individual_lesson
+student }..o{ "mayAttend" group_lesson
+student "mayAttend" }..o{ ensemble
+
+' lesson "isTaughtBy" }|--|| instructor
+
+student }|--o| "MayHaveA" contact_person
+student "MayHaveA\n\n\n" }|--o{ sibling
+
+' sibling }|--|{ student : isA
+' et |o"1"---"10"o{ et2 : relationtest
+
+' session ||---|| location : reserves 
+' session ||---|| lesson : books
+' session ||---|| group_lesson : mayBookA
+' session ||---|| individual_lesson : mayBookA
+' session ||---|| ensemble : mayBookA
+
+' group_lesson "heldAt" ||--|| location
+
+instructor ||...o{ "assignedTo" group_lesson
+instructor "assignedTo" ||..o{ individual_lesson
+instructor ||...o{ "mayTeach" ensemble
+
+' INHERITANCE
+' hide person
+hide lesson
+hide session
+show contact_details
+
+' ' rename the x* variants into x1 to see effect
+' () "xor\nsubtypes" as x1
+' stack "xor" as x_1
+' label "xor\nsubtypes" as x__1
+
+' ' super/subtype relations using x1 as intermediate connection
+' lesson <|-down- x_1
+' x_1 -up- individual_lesson
+' x_1 -up- group_lesson
+
+' lesson <|--down- individual_lesson
+' lesson <|--down- group_lesson
+' ' lesson <|--down- ensemble
+person <|--down- student
+person <|--down- instructor
+' person <|--down- contact_person
+
+' ARRANGEMENT
+' person --[hidden]up-> student
+' person --[hidden]up-> contact_person
+' person --[hidden]up-> instructor
+' person --[hidden]left-> address
+
+instructor --[hidden]right-> student
+student --[hidden]up-> contact_person
+instructor --[hidden]up-> address
+' student --[hidden]up-> address
+' instructor --[hidden]up-> contact_details
+' student --[hidden]up-> contact_details
+
+' instructor --[hidden]down-> contact_details
+' student --[hidden]down-> contact_details
+' contact_person --[hidden]down-> contact_details
+
 
 @enduml
