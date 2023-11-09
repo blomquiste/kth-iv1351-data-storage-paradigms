@@ -58,21 +58,21 @@
 The assignment involved creating a 
 \emph{conceptual model} 
 for the 
-\emph{Soudgood music school} 
+\emph{Soundgood music school} 
 database. 
-
 A conceptual model is a model that only describes the parts of the reality that
 are to be stored in the database.
 It includes the main concepts (entities) required to store
 information and the relationships that exist between these entities.
-
 The conceptual stage is, however, only an initial model, without all the details required to
 create a database. 
 
-This model is the first type of entity-relation diagram (also called ER diagram or
-ERD) introduced in the course. ER diagrams are used for all types of database
-models.  In this report, the ER diagram was modelled using crow-foot notation
-(IE). 
+This model is the first type of Entity-Relation Diagram (also called ER diagram or
+ERD) introduced in the course. 
+ER diagrams are used for all types of database
+models.  
+In this report, the ER diagram was modelled using \emph{Crow's foot notation}
+-- also known as Information Engineering notation (IE).
 
 The author collaborated with
 \emph{Elin Blomquist}
@@ -91,7 +91,8 @@ when constructing the conceptual model described in this report.
 
 % EB:
 % Higher grade:
-% You will have to read about inheritance first (for example in the text book), since it is not much covered in the lectures. 
+% You will have to read about inheritance first (for example in the text book),
+% since it is not much covered in the lectures. 
 
 The pre-recorded lectures on both domain and conceptual models (given by the course examiner) were reviewed, 
 and chapters three and five in the main textbook, 
@@ -104,7 +105,7 @@ Additionally, the document
 was studied.
 
 \section{Method}
-
+\label{sec:method}
 % \textbf{This chapter tells \textit{how} you solved the task.}
 
 % Explain how you worked when solving the tasks and how you evaluated that your
@@ -120,22 +121,33 @@ was studied.
 % - If you did not perform a particular step, explain why the result was better (or at least not worse) without that step. 
 
 % The "steps" in question: 
-% 1. Noun identification - find all nouns in the specification and make them into entities
-% 2. Use a category list - get inspired from the category list and creative, make entities out of all relevant things that are related to any of the existing entities.
+% 1. Noun identification - find all nouns in the specification and make them
+% into entities
+% 2. Use a category list - get inspired from the category list and creative,
+% make entities out of all relevant things that are related to any of the
+% existing entities.
 % 3. Remove unnecessary entities
-% 4. Find attributes - string, boolean, number, time. Can not have attributes themselfs. Not a part of an entity.
+% 4. Find attributes - string, boolean, number, time. Can not have attributes
+% themselfs. Not a part of an entity.
 % 5. Find all associations 
 % 6. Review - redo any of the steps above if necessary 
 
-% When doing these steps for a conceptual model, focus on data and relations. Some guidelines are: 
+% When doing these steps for a conceptual model, focus on data and relations.
+% Some guidelines are: 
 % - No entity without attributes
 % - Important to find all attributes
 % - Define cardinality for  all attributes, and if it is allowed no value
 % - Important to find all relations, and decide their cardinality
 
-% While making the entities, we only focused on non-identifying attributes, according to the instruction. 
+% While making the entities, we only focused on non-identifying attributes,
+% according to the instruction. 
+This section outlines the systematic approach taken to develop the conceptual
+model for 
+\emph{The Soundgood music school} 
+database system, represented through an
+ERD using crow's foot notation.
 
-\subsection*{tools}
+\subsection*{Tools}
 The modeling tool used was \emph{PlantUML}.
 PlantUML is an open-source tool for creating diagrams using a text-based
 syntax.
@@ -147,7 +159,9 @@ All code was written in \emph{Visual Studio Code}.
 Quick-fixes and editing was, however, done in \emph{Vim}.
 
 \subsection*{The overall Work-flow}
-The following steps were taken in order to create the conceptual model based on the project description and the pre-recorded lectures on the topic.
+The following steps were taken in order to create the conceptual model based on
+the project description 
+and the above mention pre-recorded lectures on the topic.
 
 \begin{description}
   \item[Step 1: Noun Identification] 
@@ -169,13 +183,16 @@ The following steps were taken in order to create the conceptual model based on 
 
   \item[Step 3: Entity Evaluation: Removing Unnecessary Entities or duplicates]
   Following the collation of entities, an evaluation was conducted to eliminate
-  redundancies and non-essential or non-relevant entities. 
+  redundancies and non-essential or non-relevant entities.
 
   \item[Step 4: Attribute Determination]
   When examining the entities identified in the previous steps, the focus
   shifted to determining which of them were truly entities and which would be
-  better represented as attributes of other entities. 
-  The primary guideline was atomicity, i.e., attributes must be indivisible to remain meaningful. An attribute should represent the most granular piece of data that is of interest to the system (e.g. a string, boolean, timestamp etc.). 
+  better represented as attributes of other entities. 
+  The primary guideline was atomicity, i.e., attributes must be indivisible to
+  remain meaningful. 
+  An attribute should represent the most granular piece of data that is of
+  interest to the system (e.g. a string, boolean, timestamp etc.).
 
   Furthermore, if an identified entity did not possess attributes, it signaled a
   need for reassessment of its role within the model. Entities without
@@ -184,7 +201,7 @@ The following steps were taken in order to create the conceptual model based on 
   conceptual model.
 
   Entities that could not meet this criterion were either reclassified as
-  attributes or removed from the model. 
+  attributes or removed from the model. 
 
   \item[Step 5: Association Mapping]
   The inter-entity relationships were then defined, creating a network of
@@ -196,7 +213,7 @@ The following steps were taken in order to create the conceptual model based on 
   associations were complete and accurate. This cyclical process allowed the
   model to be improved, so it was in line with the systems requirements.
   
-  The guidelines followed during this cyclic development was as follows
+  The guidelines followed during this cyclic development process was as follows
   \begin{description}
     \item[Entity Attribution:]
     Every entity was required to have at least one attribute. This rule
@@ -205,7 +222,7 @@ The following steps were taken in order to create the conceptual model based on 
 
     \item[Cardinality Specification:]
     Cardinalities for all attributes were defined, including constraints on
-    whether null values were permissible. 
+    whether null values were permissible. 
 
     \item[Relation Identification:]
     Identifying all relevant relationships and their cardinalities between
@@ -215,34 +232,168 @@ The following steps were taken in order to create the conceptual model based on 
     \item[Non-Identifying Attributes:]
     In accordance with the video instructions, the focus was placed exclusively
     on non-identifying attributes. Identifying attributes that could serve as
-    primary or candidate keys in a database is done in the logical
-    designxxxxxxxxish????
+    primary or candidate keys in a database is done in
+    \emph{the Logical and Physical Model}.
   \end{description}
 \end{description}
 
+\pagebreak
 \section{Result}
 
 % \textbf{This chapter explains \textit{the result} of what you did.}
 
-% \textbf{The report must show that you have done the work yourself and that you have understood what you have done}, both of these goals are met by carefully explaining your solution here in the result chapter, and proving that it meets the requirements. \textit{State each requirement that is met} and explain \textit{how you met it}. Also include links to your code in your Git repository, and include also diagrams, see Figure \ref{fig:diag}, and other figures to illustrate your reasoning. All figures must be referenced in the text. Ask yourself if the solution is clearly explained, and if the reader will understand the application. What would you yourself want to know if you read about the application, is that included in the report? More specific instructions for the content can be found under each task on the Project page in Canvas. 
+% \textbf{The report must show that you have done the work yourself and that you
+% have understood what you have done}, both of these goals are met by carefully
+% explaining your solution here in the result chapter, and proving that it meets
+% the requirements. \textit{State each requirement that is met} and explain
+% \textit{how you met it}. Also include links to your code in your Git
+% repository, and include also diagrams, see Figure \ref{fig:diag}, and other
+% figures to illustrate your reasoning. All figures must be referenced in the
+% text. Ask yourself if the solution is clearly explained, and if the reader
+% will understand the application. What would you yourself want to know if you
+% read about the application, is that included in the report? More specific
+% instructions for the content can be found under each task on the Project page
+% in Canvas. 
 
 % EB:
 % - show and briefly explain your conceptual model.
 
 % Higher grade: 
-% - Also show how the same relation could be modeled without using inheritance. The Result chapter of the report must include one conceptual model diagram with inheritance, using the inheritance symbol, and one diagram that models the same thing without inheritance. 
+% - Also show how the same relation could be modeled without using inheritance.
+% The Result chapter of the report must include one conceptual model diagram
+% with inheritance, using the inheritance symbol, and one diagram that models
+% the same thing without inheritance. 
 
 \begin{figure}[h!]
   \begin{center}
     \includegraphics[width=\textwidth]{figures/c_model.png}
-    \caption{A sample diagram, included to illustrate caption (this text), numbering and reference in text.}
+    \caption{The Conceptual Model drawn as an ERD using IE notation}
     \label{fig:diag}
   \end{center}
 \end{figure}
 
-\pagebreak
+A couple of notes are used to clarify cardinality restriction, which were chosen
+not to be modelled to avoid clutter. 
+The \verb|level| attribute, included in the 
+\verb|group_lesson| and 
+\verb|individual_lesson|
+entities, is an enumeration (enum) of the skill-levels 
+\verb|beginner|, 
+\verb|intermediate|
+and 
+\verb|advanced|.
+The naming convention is based on 
+Mozilla's SQL Style Guide. 
 
+Therefore, \emph{Snake Case}
+(sometimes referred to as underscore case or 
+ snake\_case)
+is used, where each space is replaced with underscore
+and all letters, including the first letter, is written in lowercase. 
+
+\pagebreak
 \section{Discussion}
+The model, illustrated in figure \ref{fig:diag}, was constructed with maximum
+data integrity in mind.
+Pricing schemes and data relating to tasks, performed by the school
+administration, were therefore avoided, since it can be based on derived data.
+Administrative staff are regarded as users, while the booking system or
+interface is regarded as a distinct system from the database and are therefore
+not included in this initial model. One could further argue that they are part
+of the application that handles the operations and/or user interface, rather
+than being part of a database.  
+On the other hand, the interface and other things left-out (like e.g.
+admin-entities) could have been referred to as a note in the diagram.  
+
+Even though there are open issues (described below), the project group considers
+the conceptual model to contain all the necessary data to complete the first
+project task.  
+
+\subsubsection*{Atomicity}
+As mentioned in the chapter \ref{sec:method} (Method) 
+attributes must be indivisible to
+remain meaningful i.e. atomicity.
+The attributes
+level
+full_name
+are therefore questionable.
+
+The handling of name attributes was considered. 
+For enhanced adaptability,  it
+would be better to divide the 
+\verb|full_name| into ''first_name'' and ''last_name'' or
+possible even adding an optional attribute for ''middle name'' 
+This approach helps with various functions, such as querying specific
+individuals based on a last name, or organizing lists.
+
+A full name can easily be assembled from its parts, 
+whereas breaking down a full
+name into individual components is not as straightforward. 
+For example,
+personalizing an email with ''Dear [First Name]'' 
+is simple when the first name is
+stored separately, but challenging when only a full name is available.
+
+Despite these advantages, the group opted to merely specify the presence of a
+''full name'' attribute in the conceptual model, postponing the decision to split
+the name until later stages of development to maintain flexibility.
+
+\subsubsection*{Possible entities and attributes}
+The project group chose to add some attribute examples in the entity 
+\verb|contact_details|,
+(with a note that these
+are only examples of possible contact details) and 
+must therefore be discussed 
+with the client. 
+
+From the category list one can identify a possible entity
+called ''classroom'' (location).
+The project group chose not to include it, 
+since the project description never explicitly required 
+the database system to keep track of where lessons took place.
+Something one naturally could add to the client-discussion. 
+
+Other possible entities would be a ''time-slot'', grouping 
+together the attributes
+\verb|date|
+\verb|start_time|
+\verb|end_time|.
+
+\subsection*{Possible inheritance}
+Many of the entities share common properties. 
+Inheritance can therefore be applied to the model. 
+For example, 
+ensemble, 
+\verb|group_lesson| and 
+\verb|individual_lesson| 
+all share common attributes, such as 
+\verb|price|
+\verb|level| and 
+\verb|date|. 
+(Furthermore, 
+\verb|group_lesson| and 
+\verb|individual_lesson| share attributes instruments)
+
+These attributes can be grouped together
+in a parent entity called lesson, session or booking. 
+The sub-entities will then only include attributes that are more
+unique to them. 
+Such as the attribute
+\verb|genre|.
+
+The same technique can be used with the 
+\verb|instructor| and 
+\verb|student|,
+who all can inherit common properties from a 
+person 
+parent entity. 
+Attributes in common are 
+\verb|personal_identify_number| and 
+\verb|full_name| 
+and are further linked to the dependent entities 
+\verb|contact_details|
+and 
+\verb|address|.
 
 % \textbf{This chapter \textit{analysis} the result presented in the previous section.} 
 
@@ -311,8 +462,6 @@ The following steps were taken in order to create the conceptual model based on 
 \section{Comments About the Course}
 
 % \textbf{This section is optional, but please at least write approximately how much time you spent on the assignment}, including lectures, labs, tutorials and seminars. This is of great help for course evaluation.
-
 % Also, any other comment(s) related to this course offering or to coming offerings is much appreciated. 
-
 
 \end{document}
