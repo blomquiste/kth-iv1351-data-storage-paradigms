@@ -7,6 +7,10 @@
 \usepackage{wrapfig}
 \usepackage{fancyvrb}
 \usepackage{fancyhdr}
+
+\usepackage[font=footnotesize,labelfont=bf,skip=2pt]{caption}
+\usepackage{hyperref}
+
 \pagestyle{fancy}
 
 % Create header and footer
@@ -18,6 +22,7 @@
 \lfoot{}
 \cfoot{\thepage\ (\pageref{LastPage})}
 \rfoot{}
+
 
 \title{Project Report, Task 1}
 \subtitle{Data Storage Paradigms, IV1351}
@@ -93,15 +98,12 @@ when constructing the conceptual model described in this report.
 % Higher grade:
 % You will have to read about inheritance first (for example in the text book),
 % since it is not much covered in the lectures. 
-
-The pre-recorded lectures on both domain and conceptual models (given by the course examiner) were reviewed, 
-and chapters three and five in the main textbook, 
-\emph{Fundamentals of Database Systems},% TODO REF 
-as well as sections 6.1-6.4 in the alternative textbook 
-\emph{Database System Concepts}, 
-were read. 
+The pre-recorded lectures on both domain and conceptual models, given by the
+course examiner, were reviewed, and chapters three and four in the main textbook
+(Fundamentals of Database Systems) as well as sections 6.1-6.4 in the
+alternative textbook (Database System Concepts) were examined. 
 Additionally, the document 
-\emph{tips-and-tricks-task1.pdf} %LÄNK
+\href{https://canvas.kth.se/courses/43013/files/7095362?wrap=1}{tips-and-tricks-task1.pdf}
 was studied.
 
 \section{Method}
@@ -271,7 +273,6 @@ and the above mention pre-recorded lectures on the topic.
     \label{fig:diag}
   \end{center}
 \end{figure}
-
 A couple of notes are used to clarify cardinality restriction, which were chosen
 not to be modelled to avoid clutter. 
 The \verb|level| attribute, included in the 
@@ -338,7 +339,18 @@ Despite these advantages, the group opted to merely specify the presence of a
 ''full name'' attribute in the conceptual model, postponing the decision to split
 the name until later stages of development to maintain flexibility.
 
-\subsubsection*{Possible entities and attributes}
+\subsubsection*{Places}
+In the project description, under the subsection lesson, it states 
+\emph{''A group lesson has a specified number of places...''}. 
+This statement is ambiguous,
+and further clarification would have been needed. It could either mean the
+number of accepted students or the number of locations. The project group
+decided to use the former, even though discussions were held on which case to
+use,  or both to be on the safe side.  In the project description, there is a
+section that says the model can't have things that aren't in the detailed
+description.
+
+\subsubsection*{Other possible entities and attributes}
 The project group chose to add some attribute examples in the entity 
 \verb|contact_details|,
 (with a note that these
@@ -353,7 +365,7 @@ since the project description never explicitly required
 the database system to keep track of where lessons took place.
 Something one naturally could add to the client-discussion. 
 
-Other possible entities would be a ''time-slot'', grouping 
+Other possible entities would be a ''time slot'', grouping 
 together the attributes
 \verb|date|
 \verb|start_time|
@@ -394,6 +406,7 @@ and are further linked to the dependent entities
 \verb|contact_details|
 and 
 \verb|address|.
+
 
 % \textbf{This chapter \textit{analysis} the result presented in the previous section.} 
 
@@ -457,11 +470,5 @@ and
 
 % One price for beginner and intermediate, and one for advanced. -- Men kommer det alltid att gälla? Inte bra för flex. Vidare står det att they might not always
 % have the same price for beginners and intermediate lessons
-
-
-\section{Comments About the Course}
-
-% \textbf{This section is optional, but please at least write approximately how much time you spent on the assignment}, including lectures, labs, tutorials and seminars. This is of great help for course evaluation.
-% Also, any other comment(s) related to this course offering or to coming offerings is much appreciated. 
 
 \end{document}
