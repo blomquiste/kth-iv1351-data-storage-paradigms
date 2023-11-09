@@ -31,21 +31,55 @@
 \section*{Tips for Report Writing}
 \textbf{REMOVE THIS SECTION BEFORE SUBMITTING THE REPORT.}\\
 
-\noindent \textit{The target audience has exactly the same skills as the author, except they do not know anything at all about the specific application described in the report.} \\
+\noindent \textit{The target audience has exactly the same skills as the author,
+except they do not know anything at all about the specific application described
+in the report.} \\
 
 Consider the following:
 
 \begin{itemize}
-  \item \textbf{The report must be \textit{centered around the requirements}. Which are they (Introduction), how did you work to meet them (Method), what is the solution that meets them (Result), and how can you be sure they are met (Discussion). This is the IMRaD method.} The requirements on the Introduction, Method, Result and Discussion chapters are described below under each chapter.
+  \item \textbf{The report must be \textit{centered around the requirements}.
+  Which are they (Introduction), how did you work to meet them (Method), what is
+  the solution that meets them (Result), and how can you be sure they are met
+  (Discussion). This is the IMRaD method.} The requirements on the Introduction,
+  Method, Result and Discussion chapters are described below under each chapter.
 
   \item Is spelling and grammar correct? Is spoken language avoided?
 
-  \item Does the report have a good structure with sections, subsections and paragraphs?
+  \item Does the report have a good structure with sections, subsections and
+  paragraphs?
 
-  \item Is the text clarified with images and/or other figures, and with links to the code in your Git repository? Remember that all figures (images, tables, graphs, code listings, etc) shall be numbered and have a short explaining text.
+  \item Is the text clarified with images and/or other figures, and with links
+  to the code in your Git repository? Remember that all figures (images, tables,
+  graphs, code listings, etc) shall be numbered and have a short explaining
+  text.
 \end{itemize}
 
 \section{Introduction}
+The assignment involved creating a 
+\emph{conceptual model} 
+for the 
+\emph{Soudgood music school} 
+database. 
+
+A conceptual model is a model that
+only describes the parts of the reality that are to be stored in the
+database.
+It includes the main concepts (entities) required to store
+information and the relationships that exist between these entities.
+
+The conceptual stage is, however, only an initial model, without all the details required to
+create a database. 
+
+This model is the first type of entity-relation diagram (also called ER diagram or
+ERD) introduced in the course. ER diagrams are used for all types of database
+models.  In this report, the ER diagram was modelled using crow-foot notation
+(IE). 
+
+The author collaborated with
+\emph{Elin Blomquist}
+when constructing the conceptual model
+described in this report.
 
 \textbf{This chapter tells \textit{what} are you going to do.} 
 
@@ -54,46 +88,53 @@ state the requirements. \textit{Also specify which other student you worked with
 when solving the tasks, or if you worked alone.} 
 
 \section{Literature Study}
+% This chapter must prove that you collected sufficient knowledge before starting
+% development, instead of just hacking away without knowing how to complete a
+% task. State what you have read and briefly summarize what you have learned.
 
-This chapter must prove that you collected sufficient knowledge before starting
-development, instead of just hacking away without knowing how to complete a
-task. State what you have read and briefly summarize what you have learned.
+% EB:
+% Higher grade:
+% You will have to read about inheritance first (for example in the text book), since it is not much covered in the lectures. 
 
-EB:
-Higher grade:
-You will have to read about inheritance first (for example in the text book), since it is not much covered in the lectures. 
+The pre-recorded lectures on both domain and conceptual models (given by the course examiner) were reviewed, 
+and chapters three
+and five in the main textbook, \emph{Fundamentals of Database Systems},% TODO REF 
+as well as sections 6.1-6.4 in the alternative textbook \emph{Database System Concepts}, 
+were read. 
+Additionally, the document \emph{tips-and-tricks-task1.pdf} %LÄNK
+was studied.
 
 \section{Method}
 
 \textbf{This chapter tells \textit{how} you solved the task.}
 
-Explain how you worked when solving the tasks and how you evaluated that your
-solution met the requirements. \textit{Do not explain your solution and do not
-refer to code}, that belongs to the \textit{Result} chapter. More specific
-instructions for the content can be found under each task on the Project page in
-Canvas.
+% Explain how you worked when solving the tasks and how you evaluated that your
+% solution met the requirements. \textit{Do not explain your solution and do not
+% refer to code}, that belongs to the \textit{Result} chapter. More specific
+% instructions for the content can be found under each task on the Project page in
+% Canvas.
 
-\textbf{EB:}
-- mention which diagram editor you used
-- explain the procedure you followed to create the conceptual model
-- you shall mention all steps that are covered in the videos on conceptual modeling. NO RESULTS
-- If you did not perform a particular step, explain why the result was better (or at least not worse) without that step. 
+% \textbf{EB:}
+% - mention which diagram editor you used
+% - explain the procedure you followed to create the conceptual model
+% - you shall mention all steps that are covered in the videos on conceptual modeling. NO RESULTS
+% - If you did not perform a particular step, explain why the result was better (or at least not worse) without that step. 
 
-The "steps" in question: 
-1. Noun identification - find all nouns in the specification and make them into entities
-2. Use a category list - get inspired from the category list and creative, make entities out of all relevant things that are related to any of the existing entities.
-3. Remove unnecessary entities
-4. Find attributes - string, boolean, number, time. Can not have attributes themselfs. Not a part of an entity.
-5. Find all associations 
-6. Review - redo any of the steps above if necessary 
+% The "steps" in question: 
+% 1. Noun identification - find all nouns in the specification and make them into entities
+% 2. Use a category list - get inspired from the category list and creative, make entities out of all relevant things that are related to any of the existing entities.
+% 3. Remove unnecessary entities
+% 4. Find attributes - string, boolean, number, time. Can not have attributes themselfs. Not a part of an entity.
+% 5. Find all associations 
+% 6. Review - redo any of the steps above if necessary 
 
-When doing these steps for a conceptual model, focus on data and relations. Some guidelines are: 
-- No entity without attributes
-- Important to find all attributes
-- Define cardinality for  all attributes, and if it is allowed no value
-- Important to find all relations, and decide their cardinality
+% When doing these steps for a conceptual model, focus on data and relations. Some guidelines are: 
+% - No entity without attributes
+% - Important to find all attributes
+% - Define cardinality for  all attributes, and if it is allowed no value
+% - Important to find all relations, and decide their cardinality
 
-While making the entities, we only focused on non-identifying attributes, according to the instruction. 
+% While making the entities, we only focused on non-identifying attributes, according to the instruction. 
 
 \subsection*{tools}
 The modeling tool used was \emph{PlantUML}.
@@ -107,50 +148,79 @@ All code was written in \emph{Visual Studio Code}.
 Quick-fixes and editing was, however, done in \emph{Vim}.
 
 \subsection*{The overall Work-flow}
+The following steps were taken in order to create the conceptual model based on the project description and the pre-recorded lectures on the topic.
 
-Step 1: Noun Identification The initial step involved an examination of the provided specifications to identify potential entities. Every noun was considered a candidate entity, under the assumption that nouns typically represent objects within the system, which could either be physical (e.g., 'Instrument') or conceptual (e.g., 'Enrollment'). Please note that some of these candidates may be converted to attributes in the later process of modeling (see step 4).
+\begin{description}
+  \item[Step 1: Noun Identification] 
+  The initial step involved an examination of the provided specifications to
+  identify potential entities. Every noun was considered a candidate entity,
+  under the assumption that nouns typically represent objects within the system,
+  which could either be physical (e.g., 'Instrument') or conceptual (e.g.,
+  'Enrollment'). Please note that some of these candidates may be converted
+  to attributes in the later process of modeling (see step 4).
 
-Step 2: Category List  
+  \item[Step 2: Category List] To enrich the entity list and ensure no vital
+  element was overlooked, a category list was employed. This list helped to
+  identify additional potential entities that may not have been immediately
+  evident from the noun identification step.
+  
+  The category list in question, can be found in the provided lecture videos or
+  in the book ''A First Course in Object Oriented Development, chapter 4''
+  (REF).
 
-To enrich the entity list and ensure no vital element was overlooked, a category list was employed. 
+  \item[Step 3: Entity Evaluation: Removing Unnecessary Entities or duplicates]
+  Following the collation of entities, an evaluation was conducted to eliminate
+  redundancies and non-essential or non-relevant entities. 
 
-This list helped to identify additional  potential entities that may not have been immediately evident from the noun identification step. 
+  \item[Step 4: Attribute Determination]
+  When examining the entities identified in the previous steps, the focus
+  shifted to determining which of them were truly entities and which would be
+  better represented as attributes of other entities. 
+  The primary guideline was atomicity, i.e., attributes must be indivisible to remain meaningful. An attribute should represent the most granular piece of data that is of interest to the system (e.g. a string, boolean, timestamp etc.). 
 
-The category list in question, can be found in the provided lecture videos or in the book ''A First Course in Object Oriented Development, chapter 4'' (REF).
+  Furthermore, if an identified entity did not possess attributes, it signaled a
+  need for reassessment of its role within the model. Entities without
+  attributes are seen as potential indicators of misclassification, as each
+  entity must encapsulate data through attributes to contribute value to the
+  conceptual model.
 
-Step 3: Entity Evaluation: Removing Unnecessary Entities or duplicates
+  Entities that could not meet this criterion were either reclassified as
+  attributes or removed from the model. 
 
-Following the collation of entities, an evaluation was conducted to eliminate redundancies and non-essential or non-relevant entities. 
+  \item[Step 5: Association Mapping]
+  The inter-entity relationships were then defined, creating a network of
+  associations. Each association was examined to understand its nature
+  (dependencies) and cardinality.
 
-Step 4: Attribute Determination 
+\item[Step 6: Model Review and Iteration]
+  An iterative review was done to make sure that entities, attributes, and their
+  associations were complete and accurate. This cyclical process allowed the
+  model to be improved, so it was in line with the systems requirements.
+  
+  The guidelines followed during this cyclic development was as follows
+  \begin{description}
+    \item[Entity Attribution:]
+    Every entity was required to have at least one attribute. This rule
+    prevented the inclusion of empty or non-informative entities within the
+    model.
 
-When examining the entities identified in the previous steps, the focus shifted to determining which of them were truly entities and which would be better represented as attributes of other entities. 
+    \item[Cardinality Specification:]
+    Cardinalities for all attributes were defined, including constraints on
+    whether null values were permissible. 
 
-The primary guideline was atomicity, i.e., attributes must be indivisible to remain meaningful. An attribute should represent the most granular piece of data that is of interest to the system (e.g. a string, boolean, timestamp etc.). 
+    \item[Relation Identification:]
+    Identifying all relevant relationships and their cardinalities between
+    entities. This included defining whether the relationships were one-to-one,
+    one-to-many, or many-to-many, ensuring clarity in the data structure.
 
-Furthermore, if an identified entity did not possess attributes, it signaled a need for reassessment of its role within the model. Entities without attributes are seen as potential indicators of misclassification, as each entity must encapsulate data through attributes to contribute value to the conceptual model.
+    \item[Non-Identifying Attributes:]
+    In accordance with the video instructions, the focus was placed exclusively
+    on non-identifying attributes. Identifying attributes that could serve as
+    primary or candidate keys in a database is done in the logical
+    designxxxxxxxxish????
+  \end{description}
+\end{description}
 
-Entities that could not meet this criterion were either reclassified as attributes or removed from the model. 
-
-Step 5: Association Mapping 
-
-The inter-entity relationships were then defined, creating a network of associations. Each association was examined to understand its nature (dependencies) and cardinality.
-
-Step 6: Model Review and Iteration 
-
-An iterative review was done to make sure that entities, attributes, and their associations were complete and accurate. This cyclical process allowed the model to be improved, so it was in line with the systems requirements.
-
-Guidelines Followed During Development 
-
-The construction of the conceptual model was governed by several principles:
-
-Entity Attribution: Every entity was required to have at least one attribute. This rule prevented the inclusion of empty or non-informative entities within the model.
-
-Cardinality Specification: Cardinalities for all attributes were defined, including constraints on whether null values were permissible. 
-
-Relation Identification: Identifying all relevant relationships and their cardinalities between entities. This included defining whether the relationships were one-to-one, one-to-many, or many-to-many, ensuring clarity in the data structure.
-
-Non-Identifying Attributes: In accordance with the video instructions, the focus was placed exclusively on non-identifying attributes. Identifying attributes that could serve as primary or candidate keys in a database is done in in the logical designxxxxxxxxish????
 \section{Result}
 
 \textbf{This chapter explains \textit{the result} of what you did.}
