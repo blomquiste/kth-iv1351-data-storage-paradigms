@@ -49,11 +49,15 @@ Consider the following:
 
 \textbf{This chapter tells \textit{what} are you going to do.} 
 
-Explain the task and the requirements on the solution. It's important to clearly state the requirements. \textit{Also specify which other student you worked with when solving the tasks, or if you worked alone.} 
+Explain the task and the requirements on the solution. It's important to clearly
+state the requirements. \textit{Also specify which other student you worked with
+when solving the tasks, or if you worked alone.} 
 
 \section{Literature Study}
 
-This chapter must prove that you collected sufficient knowledge before starting development, instead of just hacking away without knowing how to complete a task. State what you have read and briefly summarize what you have learned.
+This chapter must prove that you collected sufficient knowledge before starting
+development, instead of just hacking away without knowing how to complete a
+task. State what you have read and briefly summarize what you have learned.
 
 EB:
 Higher grade:
@@ -63,10 +67,13 @@ You will have to read about inheritance first (for example in the text book), si
 
 \textbf{This chapter tells \textit{how} you solved the task.}
 
-Explain how you worked when solving the tasks and how you evaluated that your solution met the requirements. \textit{Do not explain your solution and do not refer to code}, that belongs to the \textit{Result} chapter. More specific instructions for the content can be found under each task on the Project page in Canvas.
+Explain how you worked when solving the tasks and how you evaluated that your
+solution met the requirements. \textit{Do not explain your solution and do not
+refer to code}, that belongs to the \textit{Result} chapter. More specific
+instructions for the content can be found under each task on the Project page in
+Canvas.
 
-EB:
-
+\textbf{EB:}
 - mention which diagram editor you used
 - explain the procedure you followed to create the conceptual model
 - you shall mention all steps that are covered in the videos on conceptual modeling. NO RESULTS
@@ -88,7 +95,62 @@ When doing these steps for a conceptual model, focus on data and relations. Some
 
 While making the entities, we only focused on non-identifying attributes, according to the instruction. 
 
+\subsection*{tools}
+The modeling tool used was \emph{PlantUML}.
+PlantUML is an open-source tool for creating diagrams using a text-based
+syntax.
+It was chosen to enable version control through git and to avoid using a
+proprietary graphical editor.
+This report was also written in plain text mode -- \LaTeX.
 
+All code was written in \emph{Visual Studio Code}.
+Quick-fixes and editing was, however, done in \emph{Vim}.
+
+\subsection*{The overall Work-flow}
+
+Step 1: Noun Identification The initial step involved an examination of the provided specifications to identify potential entities. Every noun was considered a candidate entity, under the assumption that nouns typically represent objects within the system, which could either be physical (e.g., 'Instrument') or conceptual (e.g., 'Enrollment'). Please note that some of these candidates may be converted to attributes in the later process of modeling (see step 4).
+
+Step 2: Category List  
+
+To enrich the entity list and ensure no vital element was overlooked, a category list was employed. 
+
+This list helped to identify additional  potential entities that may not have been immediately evident from the noun identification step. 
+
+The category list in question, can be found in the provided lecture videos or in the book ''A First Course in Object Oriented Development, chapter 4'' (REF).
+
+Step 3: Entity Evaluation: Removing Unnecessary Entities or duplicates
+
+Following the collation of entities, an evaluation was conducted to eliminate redundancies and non-essential or non-relevant entities. 
+
+Step 4: Attribute Determination 
+
+When examining the entities identified in the previous steps, the focus shifted to determining which of them were truly entities and which would be better represented as attributes of other entities. 
+
+The primary guideline was atomicity, i.e., attributes must be indivisible to remain meaningful. An attribute should represent the most granular piece of data that is of interest to the system (e.g. a string, boolean, timestamp etc.). 
+
+Furthermore, if an identified entity did not possess attributes, it signaled a need for reassessment of its role within the model. Entities without attributes are seen as potential indicators of misclassification, as each entity must encapsulate data through attributes to contribute value to the conceptual model.
+
+Entities that could not meet this criterion were either reclassified as attributes or removed from the model. 
+
+Step 5: Association Mapping 
+
+The inter-entity relationships were then defined, creating a network of associations. Each association was examined to understand its nature (dependencies) and cardinality.
+
+Step 6: Model Review and Iteration 
+
+An iterative review was done to make sure that entities, attributes, and their associations were complete and accurate. This cyclical process allowed the model to be improved, so it was in line with the systems requirements.
+
+Guidelines Followed During Development 
+
+The construction of the conceptual model was governed by several principles:
+
+Entity Attribution: Every entity was required to have at least one attribute. This rule prevented the inclusion of empty or non-informative entities within the model.
+
+Cardinality Specification: Cardinalities for all attributes were defined, including constraints on whether null values were permissible. 
+
+Relation Identification: Identifying all relevant relationships and their cardinalities between entities. This included defining whether the relationships were one-to-one, one-to-many, or many-to-many, ensuring clarity in the data structure.
+
+Non-Identifying Attributes: In accordance with the video instructions, the focus was placed exclusively on non-identifying attributes. Identifying attributes that could serve as primary or candidate keys in a database is done in in the logical designxxxxxxxxish????
 \section{Result}
 
 \textbf{This chapter explains \textit{the result} of what you did.}
