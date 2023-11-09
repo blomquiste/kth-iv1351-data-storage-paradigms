@@ -399,4 +399,12 @@ entity "location" {
     building
 }
 
+entity "time_slot" {
+    ' id  UNIQUE NOT NULL
+    --
+    date  NOT NULL
+    start_time  NOT NULL
+    end_time  NOT NULL
+}
+
 @enduml

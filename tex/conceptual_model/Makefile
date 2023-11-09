@@ -19,6 +19,7 @@ all: $(OBJECTS)
 $(OUTPUT_DIR)/%.pdf: %.tex
 	mkdir -p $(OUTPUT_DIR)
 	$(LATEX) -output-directory=$(OUTPUT_DIR) --shell-escape $<
+	$(LATEX) -output-directory=$(OUTPUT_DIR) --shell-escape $<
 
 clean:
 	rm -rf $(OUTPUT_DIR)
