@@ -185,11 +185,11 @@ entity "ensemble" {
 
 ' RELATIONS
 ' person ||--|{ address  livesAt
-student "livesAt" }|--|| address
-instructor "livesAt" }|--|| address
+student }|--|| "livesAt" address
+instructor }|--|| "livesAt" address
 
 contact_person "has" ||--|| contact_details
-student ||--|| "of" contact_details
+student "has" ||--|| contact_details
 instructor "has" ||--|| contact_details
 ' person ||--|| student::person_id : isA
 ' person ||--|| instructor::person_id : isA
@@ -197,15 +197,16 @@ instructor "has" ||--|| contact_details
 ' student |o"1"--"0..2"o{ rented_instrument : mayRent
 ' student |o--o{ rental : mayMake
 ' rental "of" ||--|| instrument 
-student "canRent" |o--o{ instrument
+student "canRent" |o..o{ instrument
 
 ' student "mayAttend" |o--o{ lesson
-student "mayAttend" ||--o{ individual_lesson
-student "mayAttend" }--o{ group_lesson
-student "mayAttend" }--o{ ensemble
+student "mayAttend" ||..o{ individual_lesson
+student }..o{ "mayAttend" group_lesson
+student "mayAttend" }..o{ ensemble
+
 ' lesson "isTaughtBy" }|--|| instructor
 
-student "MayHaveA" }|--o| contact_person
+student }|--o| "MayHaveA" contact_person
 student "MayHaveA\n\n\n" }|--o{ sibling
 
 ' sibling }|--|{ student : isA
@@ -219,9 +220,9 @@ student "MayHaveA\n\n\n" }|--o{ sibling
 
 ' group_lesson "heldAt" ||--|| location
 
-instructor "assignedTo"||---o{ group_lesson
-instructor "assignedTo"||---o{ individual_lesson
-instructor "mayTeach" ||---o{ ensemble
+instructor ||...o{ "assignedTo" group_lesson
+instructor "assignedTo" ||..o{ individual_lesson
+instructor ||...o{ "mayTeach" ensemble
 
 ' INHERITANCE
 hide person
