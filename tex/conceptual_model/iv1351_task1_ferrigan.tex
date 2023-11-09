@@ -55,17 +55,52 @@ Explain the task and the requirements on the solution. It's important to clearly
 
 This chapter must prove that you collected sufficient knowledge before starting development, instead of just hacking away without knowing how to complete a task. State what you have read and briefly summarize what you have learned.
 
+EB:
+Higher grade:
+You will have to read about inheritance first (for example in the text book), since it is not much covered in the lectures. 
+
 \section{Method}
 
 \textbf{This chapter tells \textit{how} you solved the task.}
 
 Explain how you worked when solving the tasks and how you evaluated that your solution met the requirements. \textit{Do not explain your solution and do not refer to code}, that belongs to the \textit{Result} chapter. More specific instructions for the content can be found under each task on the Project page in Canvas.
 
+EB:
+
+- mention which diagram editor you used
+- explain the procedure you followed to create the conceptual model
+- you shall mention all steps that are covered in the videos on conceptual modeling. NO RESULTS
+- If you did not perform a particular step, explain why the result was better (or at least not worse) without that step. 
+
+The "steps" in question: 
+1. Noun identification - find all nouns in the specification and make them into entities
+2. Use a category list - get inspired from the category list and creative, make entities out of all relevant things that are related to any of the existing entities.
+3. Remove unnecessary entities
+4. Find attributes - string, boolean, number, time. Can not have attributes themselfs. Not a part of an entity.
+5. Find all associations 
+6. Review - redo any of the steps above if necessary 
+
+When doing these steps for a conceptual model, focus on data and relations. Some guidelines are: 
+- No entity without attributes
+- Important to find all attributes
+- Define cardinality for  all attributes, and if it is allowed no value
+- Important to find all relations, and decide their cardinality
+
+While making the entities, we only focused on non-identifying attributes, according to the instruction. 
+
+
 \section{Result}
 
 \textbf{This chapter explains \textit{the result} of what you did.}
 
 \textbf{The report must show that you have done the work yourself and that you have understood what you have done}, both of these goals are met by carefully explaining your solution here in the result chapter, and proving that it meets the requirements. \textit{State each requirement that is met} and explain \textit{how you met it}. Also include links to your code in your Git repository, and include also diagrams, see Figure \ref{fig:diag}, and other figures to illustrate your reasoning. All figures must be referenced in the text. Ask yourself if the solution is clearly explained, and if the reader will understand the application. What would you yourself want to know if you read about the application, is that included in the report? More specific instructions for the content can be found under each task on the Project page in Canvas. 
+
+EB:
+- show and briefly explain your conceptual model.
+
+Higher grade: 
+- Also show how the same relation could be modeled without using inheritance. The Result chapter of the report must include one conceptual model diagram with inheritance, using the inheritance symbol, and one diagram that models the same thing without inheritance. 
+
 
 \begin{figure}[h!]
   \begin{center}
@@ -82,6 +117,65 @@ Explain how you worked when solving the tasks and how you evaluated that your so
 \textbf{This chapter \textit{analysis} the result presented in the previous section.} 
 
 Evaluate your solution according to the assessment criteria found in the assessment-criteria documents, which are found under the bullet \textit{In the Discussion chapter of your report...}, under each task on the Project page in Canvas. You do not have to cover all specified criteria.
+
+EB:
+ Does the CM contain all information needed by Soundgood?
+ Is it easy, that is a reasonable number of hops, to collect information related to all of the major entities (student, lesson, instructor, etc).
+ Does the CM have a reasonable number of entities? Are important entities missing? Are there irrelevant entities, for example entities without attributes?
+ Are there attributes for all data that shall be stored? Do all attributes have cardinality? Is the cardinality correct? Are the correct attributes marked as NOT NULL and/or UNIQUE?
+ Does the CM have a reasonable number of relations? Are important relations missing? Are there irrelevant relations? Does all relations have cardinality at both ends and name at least at one end?
+ Are naming conventions followed? Are all names sufficiently explaining?
+ Is the notation (UML or crow foot) correctly followed?
+ Are all business rules and constraints that are not visible in the diagram explained in plain text?
+ Is the method and result explained in the report? Is there a discussion? Is the discussion relevant?
+
+Higher grade:
+- The report must include a relevant and extensive Discussion chapter about the mandatory part of the task.
+- Discuss advantages of using inheritance and advantages of not using inheritance. 
+
+
+Discission: 
+- Levels, are they entity of attribute? Why did we decide to make a note out of it? 
+- Bookings: patr of an interface? 
+- Price is based on a lesson, which is unique in its existance.
+- Name: decided "full-name", because what is a name? In this stage, it is only relavant that it exists. 
+
+* Kontaktuppgifts tabell med personID som aktörerna är kopplade till. Eller en
+  supertyp PERSON som aktörerna "subtypas" ifrån. 
+* PersonID, StudentID, InstruktörsID bytas ut mot personnummer:
+    * Förenklad lösning
+    * Personnummer är unikt
+  Men en kontaktpersons personnummer är ju irrelant så nej
+
+* With inheritance duplicate contact information is stored for persons that are both instructors and students. Perhaps, person can be switched to contact_detail/contact_info?
+or one can use person_id. 
+
+JOINT "person" with contact details. A person has a contact ID and can be a contact person, student and/or instructor. No duplicats. The person has an ID.
+
+Contact-details för studenter, instruktörer och contact person. Contact person ska inte ha personnumber och address!!!!!
+
+* **id** -> system generated. "person number" (a.k.a. personnummer, social security nbr) should not be a requirement for ICE
+
+* **name-issue** -> You can always construct a full name from its components, but you can't always deconstruct a full name into its components
+' https://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/
+' https://stackoverflow.com/questions/1122328/first-name-middle-name-last-name-why-not-full-name 
+
+* **ensemble** -> Should it be a subtype of lesson-parent (the parent for group and individual) or its own?  The instructions separate them.
+
+* A group lesson has a specified nbr of places (which may vary) -- WHAT DOES THAT MEAN?
+Enbart ensemble har maximium? Men places i group betyder max? Eller?
+  - Ska den då har en egen "entity"??
+* ska minimum nbr of students logiken vara med i en dB?
+* Ska genre och level vara egna entities eller typ enums?
+* Finns fixed time slots och non fixed schedual för privata lektioner. Är det något som ska speglas i dBn?
+
+* Admin staff? Ska det vara en database eller via en "app providing a user interface"---dvs bokningssystem
+
+Bookings entity instead of lessons!! Eller ska lessons vara en parent och bookings något separat.
+
+One price for beginner and intermediate, and one for advanced. -- Men kommer det alltid att gälla? Inte bra för flex. Vidare står det att they might not always
+have the same price for beginners and intermediate lessons
+
 
 \section{Comments About the Course}
 
