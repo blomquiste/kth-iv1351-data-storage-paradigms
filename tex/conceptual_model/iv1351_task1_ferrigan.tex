@@ -106,10 +106,10 @@ Additionally, the document
 \href{https://canvas.kth.se/courses/43013/files/7095362?wrap=1}{tips-and-tricks-task1.pdf}
 was studied.
 
+\clearpage
 \section{Method}
 \label{sec:method}
 % \textbf{This chapter tells \textit{how} you solved the task.}
-
 % Explain how you worked when solving the tasks and how you evaluated that your
 % solution met the requirements. \textit{Do not explain your solution and do not
 % refer to code}, that belongs to the \textit{Result} chapter. More specific
@@ -163,7 +163,7 @@ Quick-fixes and editing was, however, done in \emph{Vim}.
 \subsection*{The overall Work-flow}
 The following steps were taken in order to create the conceptual model based on
 the project description 
-and the above mention pre-recorded lectures on the topic.
+and the above mentioned pre-recorded lectures on the topic.
 
 \begin{description}
   \item[Step 1: Noun Identification] 
@@ -215,7 +215,7 @@ and the above mention pre-recorded lectures on the topic.
   associations were complete and accurate. This cyclical process allowed the
   model to be improved, so it was in line with the systems requirements.
   
-  The guidelines followed during this cyclic development process was as follows
+  The guidelines followed during this cyclic development process were as follows
   \begin{description}
     \item[Entity Attribution:]
     Every entity was required to have at least one attribute. This rule
@@ -270,7 +270,7 @@ and the above mention pre-recorded lectures on the topic.
   \begin{center}
     \includegraphics[width=\textwidth]{figures/c_model.png}
     \caption{The Conceptual Model drawn as an ERD using IE notation}
-    \label{fig:diag}
+    \label{fig:cm}
   \end{center}
 \end{figure}
 A couple of notes are used to clarify cardinality restriction, which were chosen
@@ -289,11 +289,19 @@ Mozilla's SQL Style Guide.
 Therefore, \emph{Snake Case}
 (sometimes referred to as underscore case or 
  snake\_case)
-is used, where each space is replaced with underscore
+is used, where each space is replaced with an underscore
 and all letters, including the first letter, is written in lowercase. 
 
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=\textwidth]{figures/i_model.png}
+    \caption{The Conceptual Model with inheritance and payout-/billing information}
+    \label{fig:cm_i}
+  \end{center}
+\end{figure}
+
 \section{Discussion}
-The model, illustrated in figure \ref{fig:diag}, was constructed with maximum
+The model, illustrated in figure \ref{fig:cm}, was constructed with maximum
 data integrity in mind.
 Pricing schemes and data relating to tasks, performed by the school
 administration, were therefore avoided, since it can be based on derived data.
@@ -309,6 +317,45 @@ Even though there are open issues (described below), the project group considers
 the conceptual model to contain all the necessary data to complete the first
 project task.  
 
+\subsection*{Possible inheritance}
+Many of the entities share common properties. 
+Inheritance can therefore be applied to the model. 
+For example, 
+ensemble, 
+\verb|group_lesson| and 
+\verb|individual_lesson| 
+all share common attributes, such as 
+\verb|price|
+\verb|level| and 
+\verb|date|. 
+(Furthermore, 
+\verb|group_lesson| and 
+\verb|individual_lesson| share attributes instruments)
+
+These attributes can be grouped together
+in a parent entity called lesson, session or booking. 
+As seen in figure \ref{fig:cm_i}, the project group chose
+to call this parent entity for session, since it includes both 
+lessons and the ensemble.
+The sub-entities will then only include attributes that are more
+unique to them. 
+Such as the attribute
+\verb|genre|,
+\verb|instrument| and
+\verb|level|.
+
+The same technique can be used with the 
+\verb|instructor| and 
+\verb|student| entity,
+who can inherit common properties from a 
+parent entity (person). 
+Attributes in common are 
+\verb|personal_identify_number| and 
+\verb|full_name| 
+and are further linked to the dependent entities 
+\verb|contact_details|
+and 
+\verb|address|.
 \subsubsection*{Atomicity}
 As mentioned in the chapter \ref{sec:method} (Method) 
 attributes must be indivisible to
@@ -339,7 +386,7 @@ Despite these advantages, the group opted to merely specify the presence of a
 the name until later stages of development to maintain flexibility.
 
 \subsubsection*{Places}
-In the project description, under the subsection lesson, it states 
+In the project description, under the subsection lesson, it states  
 \emph{''A group lesson has a specified number of places...''}. 
 This statement is ambiguous,
 and further clarification would have been needed. It could either mean the
@@ -350,13 +397,6 @@ section that says the model can't have things that aren't in the detailed
 description.
 
 \subsubsection*{Other possible entities and attributes}
-\begin{figure}[h!]
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{figures/e_cand.png}
-    \caption{Other entity candidates discussed}
-    \label{fig:e_cand}
-  \end{center}
-\end{figure}
 The project group chose to add some attribute examples in the entity 
 \verb|contact_details|,
 (with a note that these
@@ -364,7 +404,7 @@ are only examples of possible contact details) and
 must therefore be discussed 
 with the client. 
 
-From the category list one can identify a possible entity
+From the category list, one can identify a possible entity
 called ''classroom'' (location).
 The project group chose not to include it, 
 since the project description never explicitly required 
@@ -377,41 +417,14 @@ together the attributes
 \verb|start_time|
 \verb|end_time|.
 
-\subsection*{Possible inheritance}
-Many of the entities share common properties. 
-Inheritance can therefore be applied to the model. 
-For example, 
-ensemble, 
-\verb|group_lesson| and 
-\verb|individual_lesson| 
-all share common attributes, such as 
-\verb|price|
-\verb|level| and 
-\verb|date|. 
-(Furthermore, 
-\verb|group_lesson| and 
-\verb|individual_lesson| share attributes instruments)
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{figures/e_cand.png}
+    \caption{Other entity candidates discussed}
+    \label{fig:e_cand}
+  \end{center}
+\end{figure}
 
-These attributes can be grouped together
-in a parent entity called lesson, session or booking. 
-The sub-entities will then only include attributes that are more
-unique to them. 
-Such as the attribute
-\verb|genre|.
-
-The same technique can be used with the 
-\verb|instructor| and 
-\verb|student|,
-who all can inherit common properties from a 
-person 
-parent entity. 
-Attributes in common are 
-\verb|personal_identify_number| and 
-\verb|full_name| 
-and are further linked to the dependent entities 
-\verb|contact_details|
-and 
-\verb|address|.
 
 
 % \textbf{This chapter \textit{analysis} the result presented in the previous section.} 

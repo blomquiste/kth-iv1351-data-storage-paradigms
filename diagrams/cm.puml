@@ -48,7 +48,6 @@ entity "contact_details" {
     email
     phone_number NOT NULL
 }
-
 note bottom
     Example of possible contact details
     TBD
@@ -375,7 +374,7 @@ entity "price" {
     level
 }
 
-entity "disount" {
+entity "discount" {
     --
     type
 }
@@ -415,7 +414,6 @@ skinparam linetype ortho
 
 ' skinparam ClassAttributeIconSize 0
 
-
 note as n1 
     Attributes cardinality 1..1 
     is indicated with 'NOT NULL'.
@@ -428,6 +426,122 @@ note as s1
     Payments are calculated based on lessons.
     According to 'Detailed Descriptions'.
 end note
+' FINANCIAL
+entity student_payment {
+    ' id UNIQUE NOT NULL
+    --
+    total_amount
+    student_id
+    start_of_period
+    end_of_period
+    lessons
+    rented_instruments
+}
+' note bottom 
+'     What if the bill should include several students? 
+' end note
+
+entity "billing_information" {
+    --
+    ' The name on the credit card or billing account.
+    full_name NOT NULL
+    ' The address associated with the credit card or account.
+    billing_address NOT NULL
+    ' Credit card number, expiration date, and security code (CVV), or bank account details for direct debit.
+    Payment Method Details NOT NULL
+    ' Phone number and email address, in case the business needs to contact the person about their bill.
+    Contact Information NOT NULL
+    ' Information regarding how often the customer will be charged (monthly, quarterly, annually).
+    billing_cycle_information NOT NULL
+}
+
+entity instructor_payment {
+    ' id UNIQUE NOT NULL
+    --
+    instructor_id NOT NULL
+    total_amount NOT NULL
+    start_of_period NOT NULL
+    end_of_period NOT NULL
+    lessons NOT NULL
+}
+' entity "monthly_statement" {
+' }
+
+entity "payout_information" {
+    --
+    ' The name of the individual or business that will receive the payment.
+    payee NOT NULL
+    ' Payment Address: The postal address associated with the payee's account, if necessary.
+    payment_address NOT NULL
+    ' Bank Account Details: This could include the bank name, account number, and routing number for bank transfers.
+    account_no NOT NULL
+    routing_no NOT NULL
+    bank NOT NULL
+    ' SWIFT Code and International Bank Account Number (IBAN): For international payments, these numbers help identify the bank and the individual account.
+    ' Tax Identification Number (TIN): This might be required for tax purposes, depending on the nature and location of the transaction.
+}
+
+entity "time_slot" {
+    --
+    date NOT NULL
+    start_time NOT NULL
+    end_time NOT NULL
+}
+
+entity "group_participants" {
+    --
+    ' group_lesson_id
+    min_enrolled NOT NULL
+    registered_students 0..*
+    ' registered_students : student_id[]
+}
+
+entity "ensemble_participants" {
+    --
+    ' ensemble_lesson_id UNIQUE NOT NULL
+    min_enrolled NOT NULL
+    max_enrolled NOT NULL
+    registered_students 0..* 
+}
+
+entity "level" {
+    --
+    id
+    type
+}
+
+entity "price" {
+    --
+    currency
+    amount
+    lesson
+    level
+}
+
+entity "discount" {
+    --
+    type
+}
+
+entity "administrative_staff" {
+    --
+    employee_id NOT NULL
+}
+
+entity "full_name" {
+    --
+    first_name NOT NULL
+    middle_name
+    last_name NOT NULL
+}
+
+entity "location" {
+    --
+    room
+    floor
+    building
+}
+
 
 ' ACTORS
 entity "person" {
@@ -436,7 +550,6 @@ entity "person" {
     --
     personal_identity_number UNIQUE NOT NULL
     full_name NOT NULL
-    ' contact details ->>>
 }
 
 entity "address" {
@@ -451,7 +564,6 @@ entity "contact_details" {
     email
     phone_number NOT NULL
 }
-
 note bottom
     Example of possible contact details
     TBD
@@ -460,18 +572,9 @@ end note
 entity "student" {
     ' id  UNIQUE NOT NULL
     --
-    ' person_id  UNIQUE NOT NULL
-    personal_identity_number  UNIQUE NOT NULL
-    full_name NOT NULL
-    ' siblings 0..*
-    ' rented_instrument 0..2
-    ' eller ska jag dela upp det i två?
-    ' contact_person  UNIQUE NOT NULL
-    ' no next of kin, only contact_person?
-    ' next_of_kin == person_id
+    \t\tstudent_id\t\t
 }
 
-' ärver från person
 entity "contact_person" {
     --
     ' person_id 
@@ -484,12 +587,11 @@ entity "sibling" {
     --
     student_id  1..* NOT NULL
 }
+
 entity "instructor" {
     ' id  UNIQUE  NOT NULL
     --
     ' person_id  UNIQUE NOT NULL
-    personal_identity_number  UNIQUE NOT NULL
-    full_name  NOT NULL
     instruments 1..* 
     available_time_slot 0..* 
 }
@@ -510,24 +612,11 @@ note top
     max two instruments at a time.
     Max lease is 12 months.
 end note
-' ' find a better name. "instrument_skill"? Is it even neccessary??
-' entity "instrument" {
-'     type
-'     level
-' }
-
-' is in_stock derived data? If rentee_id than its not in stock?
 
 ' LESSONS
 entity "session" {
-     id
+    '  id
      --
-}
-
-' ska instructor ligger på denna nivå eller nere hos childs?
-entity "lesson" {
-    --
-    instructor_id
     date  NOT NULL
     start_time  NOT NULL
     end_time  NOT NULL
@@ -539,10 +628,6 @@ entity "individual_lesson" {
     --
     instrument  NOT NULL
     level   NOT NULL
-    date  NOT NULL
-    start_time  NOT NULL
-    end_time  NOT NULL
-    price NOT NULL
 }
 note bottom
     The allowed values for level are
@@ -556,10 +641,6 @@ entity "group_lesson" {
     --
     instrument  NOT NULL
     level  NOT NULL
-    date  NOT NULL
-    start_time  NOT NULL
-    end_time  NOT NULL
-    price NOT NULL
     ' class_room  NOT NULL
     min_nbr_of_students  NOT NULL
     max_nbr_of_students  NOT NULL
@@ -567,9 +648,6 @@ entity "group_lesson" {
 note bottom
     The allowed values for level are
     beginner, intermediate, advanced.
-
-    What does client mean by place?
-    For now it falls under min_nbr_of_students.
 end note
 
 entity "ensemble" {
@@ -580,7 +658,6 @@ entity "ensemble" {
     ' start_time  NOT NULL
     ' end_time  NOT NULL
     ' class_room
-    price  NOT NULL
     genre  NOT NULL
     min_nbr_of_students  NOT NULL
     max_nbr_of_students  NOT NULL
@@ -588,17 +665,8 @@ entity "ensemble" {
 
 ' RELATIONS
 person }|--|| "livesAt" address
-' student }|--|| "livesAt" address
-' instructor }|--|| "livesAt" address
-
-contact_person "has" ||--|| contact_details
 person "has" ||--|| contact_details
-' student "has" ||--|| contact_details
-' instructor "has" ||--|| contact_details
-
-' person ||--|| student::person_id : isA
-' person ||--|| instructor::person_id : isA
-' person ||--|| contact_person::person_id : isA
+contact_person "has" ||--|| contact_details
 ' student |o"1"--"0..2"o{ rented_instrument : mayRent
 ' student |o--o{ rental : mayMake
 ' rental "of" ||--|| instrument 
@@ -617,7 +685,8 @@ student "MayHaveA\n\n\n" }|--o{ sibling
 ' sibling }|--|{ student : isA
 ' et |o"1"---"10"o{ et2 : relationtest
 
-' session ||---|| location : reserves 
+session ||---|| location : reserves 
+session ||---|| price : has 
 ' session ||---|| lesson : books
 ' session ||---|| group_lesson : mayBookA
 ' session ||---|| individual_lesson : mayBookA
@@ -625,15 +694,33 @@ student "MayHaveA\n\n\n" }|--o{ sibling
 
 ' group_lesson "heldAt" ||--|| location
 
-instructor ||...o{ "assignedTo" group_lesson
-instructor "assignedTo" ||..o{ individual_lesson
-instructor ||...o{ "mayTeach" ensemble
+instructor ||..o{ "assignedTo" session
+' instructor ||...o{ "assignedTo" group_lesson
+' instructor "assignedTo" ||..o{ individual_lesson
+' instructor ||...o{ "mayTeach" ensemble
+
+billing_information ||--|{ student : for
+payout_information ||--|| instructor : for
+
+session ||--|| time_slot : lasts
+group_lesson ||--|| group_participants : has
+ensemble ||--|| ensemble_participants : has
+
+discount ||--|| payout_information
+administrative_staff "books" ||...o{ session
 
 ' INHERITANCE
-' hide person
 hide lesson
-hide session
-show contact_details
+hide price
+hide location
+hide time_slot
+hide instructor_payment
+hide student_payment
+hide level
+hide full_name
+hide discount
+hide administrative_staff
+' hide discount
 
 ' ' rename the x* variants into x1 to see effect
 ' () "xor\nsubtypes" as x1
@@ -645,11 +732,11 @@ show contact_details
 ' x_1 -up- individual_lesson
 ' x_1 -up- group_lesson
 
-' lesson <|--down- individual_lesson
-' lesson <|--down- group_lesson
-' ' lesson <|--down- ensemble
-person <|--down- student
-person <|--down- instructor
+session <|-down- individual_lesson
+session <|-down- group_lesson
+session <|-down- ensemble
+person <|-down- student
+person <|-down- instructor
 ' person <|--down- contact_person
 
 ' ARRANGEMENT
@@ -658,9 +745,14 @@ person <|--down- instructor
 ' person --[hidden]up-> instructor
 ' person --[hidden]left-> address
 
-instructor --[hidden]right-> student
-student --[hidden]up-> contact_person
-instructor --[hidden]up-> address
+' instructor --[hidden]right-> student
+' student --[hidden]up-> contact_person
+' person --[hidden]left->address
+
+instructor -[hidden]up-> payout_information
+student -[hidden]up-> billing_information
+session --[hidden]right-> administrative_staff
+' instructor --[hidden]up-> address
 ' student --[hidden]up-> address
 ' instructor --[hidden]up-> contact_details
 ' student --[hidden]up-> contact_details
