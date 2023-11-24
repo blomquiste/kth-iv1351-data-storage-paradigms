@@ -348,45 +348,100 @@ VALUES
     ('Jane', 'Smith', '+467987654321', 'jane.smith@gmail.com'),
     ('Robert', 'Johnson', '+467112233445', 'robert.johnson@gmail.com'),
     ('Sarah', 'Wilson', '+467998877665', 'sarah.wilson@gmail.com'),
-    ('Michael', 'Brown', '+467334455667', 'michael.brown@gmail.com'),
-    ('Emily', 'Davis', '+467223344556', 'emily.davis@gmail.com'),
-    ('David', 'Miller', '+467445566778', 'david.miller@gmail.com');
+
+    ('Lena', 'Andersson', '+467445566772', 'lena.andersson@gmail.com'),
+    ('Lena', 'Björk', '+467445564742', 'lena.bjork@gmail.com'),
+    ('Peter', 'Larsson', '+467445546772', 'peter.larsson@gmail.com'),
+    ('Peter', 'Karlsson', '+467445144772', 'peter.Karlsson@gmail.com'),
+    ('Henrik', 'Larsson', '+469444546772', 'henrik.larsson@gmail.com'),
+    ('Ragnar', 'Andersson', '+467445546742', 'ragnar.larsson@gmail.com'),
+    ('Emma', 'Nilsson', '+467495546774', 'emma.nilsson@gmail.com'),
+    ('Ritva', 'Björk', '+467445596772', 'ritva.bjork@gmail.com');
 
 -- Populate the "student_contact_person" table with parent, guardian, and grandparent relationships
 INSERT INTO "student_contact_person" ("student_id", "contact_person_id", "relation")
 VALUES
-    ('101', 
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'John' AND "last_name" = 'Doe'), 
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Oliver' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Lena' AND "last_name" = 'Andersson'), 
      'Parent'),
-    ('102', 
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'John' AND "last_name" = 'Doe'), 
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Emma' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Lena' AND "last_name" = 'Andersson'), 
      'Parent'),
-    ('100', 
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Liam' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Lena' AND "last_name" = 'Andersson'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Mia' AND "last_name" = 'Björk')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Lena' AND "last_name" = 'Björk'), 
+     'Parent'),
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Lucas' AND "last_name" = 'Björk')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Lena' AND "last_name" = 'Björk'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Ella' AND "last_name" = 'Larsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Peter' AND "last_name" = 'Larsson'), 
+     'Parent'),
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Noah' AND "last_name" = 'Larsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Peter' AND "last_name" = 'Larsson'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Lilly' AND "last_name" = 'Karlsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Peter' AND "last_name" = 'Karlsson'), 
+     'Parent'),
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Charlie' AND "last_name" = 'Karlsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Peter' AND "last_name" = 'Karlsson'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Sophia' AND "last_name" = 'Larsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Henrik' AND "last_name" = 'Larsson'), 
+     'Parent'),
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Aiden' AND "last_name" = 'Larsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Henrik' AND "last_name" = 'Larsson'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Mila' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Ragnar' AND "last_name" = 'Andersson'), 
+     'Parent'),
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Henry' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Ragnar' AND "last_name" = 'Andersson'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Elsa' AND "last_name" = 'Nilsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Emma' AND "last_name" = 'Nilsson'), 
+     'Parent'),
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Oscar' AND "last_name" = 'Nilsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Emma' AND "last_name" = 'Nilsson'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Agnes' AND "last_name" = 'Björk')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Ritva' AND "last_name" = 'Björk'), 
+     'Parent'),
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Viktor' AND "last_name" = 'Björk')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Ritva' AND "last_name" = 'Björk'), 
+     'Parent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'William' AND "last_name" = 'Gustafsson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'John' AND "last_name" = 'Doe'), 
+     'Grandparent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Selma' AND "last_name" = 'Lundqvist')),
      (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Jane' AND "last_name" = 'Smith'), 
-     'Guardian'),
-    (103, 
+     'Grandparent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Isabella' AND "last_name" = 'Eriksson')),
      (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Robert' AND "last_name" = 'Johnson'), 
-     'Parent'),
-    (104, 
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Robert' AND "last_name" = 'Johnson'), 
-     'Parent'),
-    (85, 
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Emily' AND "last_name" = 'Davis'), 
-     'Parent'),
-    (86, 
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Emily' AND "last_name" = 'Davis'), 
-     'Parent'),
-    (87, 
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Emily' AND "last_name" = 'Davis'), 
-     'Parent'),
-    (92, 
+     'Grandparent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Oliver' AND "last_name" = 'Andersson')),
      (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Sarah' AND "last_name" = 'Wilson'), 
      'Grandparent'),
-    (105, 
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Michael' AND "last_name" = 'Brown'), 
-     'Guardian'),
-    (99,
-     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'David' AND "last_name" = 'Miller'), 
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Emma' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Sarah' AND "last_name" = 'Wilson'), 
+     'Grandparent'),
+
+     ((SELECT "id" FROM "student" WHERE "person_id" = (SELECT "id" FROM "person" WHERE "first_name" = 'Liam' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "contact_person" WHERE "first_name" = 'Sarah' AND "last_name" = 'Wilson'), 
      'Grandparent');
 
 -- Populate the "ensemble_price" table with ensemble prices and genres
@@ -454,7 +509,6 @@ FROM (
     ('piano', 'beginner', 50.00, '2023-11-23'),
     ('piano', 'intermediate', 50.00, '2023-11-23'),
     ('piano', 'advanced', 70.00, '2023-11-23'),
-    -- Skip harp and clarinet
     ('violin', 'beginner', 55.00, '2023-11-23'),
     ('violin', 'intermediate', 55.00, '2023-11-23'), -- Set the same price for intermediate and beginner
     ('violin', 'advanced', 75.00, '2023-11-23'),
@@ -473,7 +527,85 @@ FROM (
     ('bass guitar', 'beginner', 55.00, '2023-11-23'),
     ('bass guitar', 'intermediate', 55.00, '2023-11-23'), -- Set the same price for intermediate and beginner
     ('bass guitar', 'advanced', 75.00, '2023-11-23')
+    -- Skip harp and clarinet
 ) AS "p" ("instrument_name", "skill_level_name", "price_per_month", "effective_date")
 JOIN "instrument" AS "i" ON "p"."instrument_name" = "i"."name"
 JOIN "skill_level" AS "s" ON "p"."skill_level_name" = "s"."level"
 WHERE "i"."name" NOT IN ('harp', 'clarinet');
+
+-- Populate the "instructor_instrument" table with parent, guardian, and grandparent relationships
+INSERT INTO "instructor_instrument" ("instructor_id", "instrument_id")
+VALUES
+     ((SELECT "id" FROM "instructor" 
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Erik' AND "last_name" = 'Eriksson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'piano')),
+
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Erik' AND "last_name" = 'Eriksson')), 
+     (SELECT "id" FROM "instrument" WHERE "name" = 'guitar')),
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Erik' AND "last_name" = 'Eriksson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'harp')),
+
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Anna' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'drums')),
+     ((SELECT "id" FROM "instructor" 
+        WHERE "person_id" = (
+            SELECT "id" FROM "person"  WHERE "first_name" = 'Anna' AND "last_name" = 'Andersson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'piano')),
+
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Björn' AND "last_name" = 'Borg')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'piano')),
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Björn' AND "last_name" = 'Borg')),
+     (SELECT "id" FROM "instrument"  WHERE "name" = 'saxophone')),
+     ((SELECT "id" FROM "instructor" 
+        WHERE "person_id" = (
+            SELECT "id" FROM "person"  WHERE "first_name" = 'Björn' AND "last_name" = 'Borg')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'flute')),
+     ((SELECT "id" FROM "instructor" 
+        WHERE "person_id" = (
+            SELECT "id" FROM "person"  WHERE "first_name" = 'Björn' AND "last_name" = 'Borg')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'trumpet')),
+     ((SELECT "id" FROM "instructor" 
+        WHERE "person_id" = (
+            SELECT "id" FROM "person"  WHERE "first_name" = 'Björn' AND "last_name" = 'Borg')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'clarinet')),
+
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Karin' AND "last_name" = 'Karlsson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'clarinet')),
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Karin' AND "last_name" = 'Karlsson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'violin')),
+     ((SELECT "id" FROM "instructor" 
+        WHERE "person_id" = (
+            SELECT "id" FROM "person"  WHERE "first_name" = 'Karin' AND "last_name" = 'Karlsson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'guitar')),
+
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Göran' AND "last_name" = 'Gustafsson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'clarinet')),
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Göran' AND "last_name" = 'Gustafsson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'drums')),
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Göran' AND "last_name" = 'Gustafsson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'trumpet')),
+     ((SELECT "id" FROM "instructor"  
+        WHERE "person_id" = (
+            SELECT "id" FROM "person" WHERE "first_name" = 'Göran' AND "last_name" = 'Gustafsson')),
+     (SELECT "id" FROM "instrument" WHERE "name" = 'bass guitar'));
